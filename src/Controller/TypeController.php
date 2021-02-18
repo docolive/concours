@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Type;
 use App\Form\TypeType;
+use App\Service\ConcoursSession;
 use App\Repository\TypeRepository;
+use App\Repository\ConcoursRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,6 +19,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class TypeController extends AbstractController
 {
+    private $session;
+    public function __construct(ConcoursSession $concoursSession){
+        $this->session = $concoursSession;
+    }
+    
     /**
      * @Route("/", name="type_index", methods={"GET"})
      */
@@ -36,11 +43,17 @@ class TypeController extends AbstractController
      */
     public function add(Request $request): Response
     {
+        $concours = $this->session->recup();
+        if($concours == 'vide'){
+            return $this->redirectToRoute('concours_choix');
+        }
         $type = new Type();
         $form = $this->createForm(TypeType::class, $type);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $type->setConcours($concours);
+            //dd($type);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($type);
             $entityManager->flush();
@@ -50,6 +63,7 @@ class TypeController extends AbstractController
 
         return $this->render('type/add.html.twig', [
             'type' => $type,
+            'concours' => $concours,
             'form' => $form->createView(),
         ]);
     }
@@ -59,6 +73,10 @@ class TypeController extends AbstractController
      */
     public function edit(Request $request, Type $type): Response
     {
+        $concours = $this->session->recup();
+        if($concours == 'vide'){
+            return $this->redirectToRoute('concours_choix');
+        }
         $form = $this->createForm(TypeType::class, $type);
         $form->handleRequest($request);
 
@@ -70,6 +88,7 @@ class TypeController extends AbstractController
 
         return $this->render('type/add.html.twig', [
             'type' => $type,
+            'concours' => $concours,
             'form' => $form->createView(),
         ]);
     }

@@ -44,6 +44,17 @@ class Type
      */
     private $categories;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Concours::class, inversedBy="types",cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $concours;
+
+    /**
+     * @ORM\Column(type="string", length=2)
+     */
+    private $unite;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -128,6 +139,30 @@ class Type
                 $category->setType(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getConcours(): ?Concours
+    {
+        return $this->concours;
+    }
+
+    public function setConcours(?Concours $concours): self
+    {
+        $this->concours = $concours;
+
+        return $this;
+    }
+
+    public function getUnite(): ?string
+    {
+        return $this->unite;
+    }
+
+    public function setUnite(string $unite): self
+    {
+        $this->unite = $unite;
 
         return $this;
     }

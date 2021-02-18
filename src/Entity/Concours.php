@@ -109,9 +109,15 @@ class Concours
      */
     private $adress3;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Type::class, mappedBy="concours")
+     */
+    private $types;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->types = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -349,6 +355,36 @@ class Concours
     public function setAdress3(?string $adress3): self
     {
         $this->adress3 = $adress3;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Type[]
+     */
+    public function getTypes(): Collection
+    {
+        return $this->types;
+    }
+
+    public function addType(Type $type): self
+    {
+        if (!$this->types->contains($type)) {
+            $this->types[] = $type;
+            $type->setConcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeType(Type $type): self
+    {
+        if ($this->types->removeElement($type)) {
+            // set the owning side to null (unless already changed)
+            if ($type->getConcours() === $this) {
+                $type->setConcours(null);
+            }
+        }
 
         return $this;
     }

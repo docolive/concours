@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Choix concours{% endblock %}
+
+{% block body %}
+<h4>Choisir le concours sur lequel nous travaillons</h4>
+<table class="table table-striped table-borderd">
+<tr>
+<th>NOM</th>
+<th>Actions</th>
+</tr>
+{% for concours in concourses %}
+    <tr>
+    <td>{{concours.name}}</td>
+    <td>
+    <a href="{{ path('concours_session', {'id': concours.id}) }}">
+    <button class="btn btn-primary btn-sm py-0" style="font-size: 0.8em;">Choisir ce concours</button></a>
+    </td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}

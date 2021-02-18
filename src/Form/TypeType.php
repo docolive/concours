@@ -15,6 +15,7 @@ class TypeType extends AbstractType
             ->add('ordre')
             ->add('nom')
             ->add('vol_min_lot')
+            ->add('unite')
             ->add('nbre_max_ech')
         ;
     }
