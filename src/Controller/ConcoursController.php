@@ -14,12 +14,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/admin/concours")
- * @IsGranted("ROLE_ADMIN")
  */
 class ConcoursController extends AbstractController
 {
     /**
      * @Route("/", name="concours_index", methods={"GET"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function index(ConcoursRepository $concoursRepository): Response
     {
@@ -34,6 +34,7 @@ class ConcoursController extends AbstractController
 
     /**
      * @Route("/choix", name="concours_choix", methods={"GET"})
+     * @IsGranted("ROLE_CANDIDAT")
      */
     public function choix(ConcoursRepository $concoursRepository): Response
     {
@@ -48,6 +49,7 @@ class ConcoursController extends AbstractController
 
     /**
      * @Route("/{id}/session", name="concours_session", methods={"GET","POST"})
+     * @IsGranted("ROLE_CANDIDAT")
      */
     public function session(Request $request, Concours $concours, ConcoursSession $concoursSession): Response
     {
@@ -57,6 +59,7 @@ class ConcoursController extends AbstractController
 
     /**
      * @Route("/add", name="concours_add", methods={"GET","POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function add(Request $request): Response
     {
@@ -80,6 +83,7 @@ class ConcoursController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="concours_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function edit(Request $request, Concours $concours): Response
     {
@@ -100,6 +104,7 @@ class ConcoursController extends AbstractController
 
     /**
      * @Route("/{id}", name="concours_delete", methods={"DELETE"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Request $request, Concours $concours): Response
     {
