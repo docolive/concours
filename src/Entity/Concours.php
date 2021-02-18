@@ -90,11 +90,6 @@ class Concours
     private $couv_palmares;
 
     /**
-     * @ORM\OneToMany(targetEntity=Categorie::class, mappedBy="concours")
-     */
-    private $categories;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $adress1;
@@ -289,36 +284,6 @@ class Concours
     public function setCouvPalmares(?string $couv_palmares): self
     {
         $this->couv_palmares = $couv_palmares;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Categorie[]
-     */
-    public function getCategories(): Collection
-    {
-        return $this->categories;
-    }
-
-    public function addCategory(Categorie $category): self
-    {
-        if (!$this->categories->contains($category)) {
-            $this->categories[] = $category;
-            $category->setConcours($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCategory(Categorie $category): self
-    {
-        if ($this->categories->removeElement($category)) {
-            // set the owning side to null (unless already changed)
-            if ($category->getConcours() === $this) {
-                $category->setConcours(null);
-            }
-        }
 
         return $this;
     }

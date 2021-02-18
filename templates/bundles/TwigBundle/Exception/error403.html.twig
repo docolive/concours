@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="alert alert-danger mt-5 text-center">
+        Vous n'avez pas les droits pour accéder à cette page.
+        <br> <a href="{{ path('dashboard') }}"><button class="btn btn-primary">Retour</button></a>
+    </div>
+{% endblock %}

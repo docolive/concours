@@ -45,7 +45,7 @@ class Type
     private $categories;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Concours::class, inversedBy="types",cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=Concours::class, inversedBy="types")
      * @ORM\JoinColumn(nullable=false)
      */
     private $concours;

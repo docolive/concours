@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Type;
 use App\Form\TypeType;
+use App\Entity\Concours;
 use App\Service\ConcoursSession;
 use App\Repository\TypeRepository;
 use App\Repository\ConcoursRepository;
@@ -41,7 +42,7 @@ class TypeController extends AbstractController
     /**
      * @Route("/add", name="type_add", methods={"GET","POST"})
      */
-    public function add(Request $request): Response
+    public function add(Request $request, ConcoursRepository $concoursRepository): Response
     {
         $concours = $this->session->recup();
         if($concours == 'vide'){
@@ -52,9 +53,12 @@ class TypeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $concoursId = $concours->getId();
+            $concours = $concoursRepository->find($concoursId);
             $type->setConcours($concours);
-            //dd($type);
+            
             $entityManager = $this->getDoctrine()->getManager();
+            
             $entityManager->persist($type);
             $entityManager->flush();
 

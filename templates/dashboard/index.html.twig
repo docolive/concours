@@ -5,6 +5,9 @@
 <link rel="stylesheet" type="text/css" href="/css/dashboard.css">
 {% endblock %}
 {% block body %}
+
+{% if is_granted('ROLE_ADMIN') == false %}
+
 <div class="wrapper">
     <!-- Sidebar -->
     <div id="sidebar">
@@ -58,5 +61,6 @@
         {% include "dashboard/_echantillons.html.twig" with {'user': user} %}
     </div>
 
-</div>    
+</div>
+{% endif %}    
 {% endblock %}

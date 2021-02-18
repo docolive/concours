@@ -104,9 +104,15 @@ class ConcoursController extends AbstractController
     public function delete(Request $request, Concours $concours): Response
     {
         if ($this->isCsrfTokenValid('delete'.$concours->getId(), $request->request->get('_token'))) {
+            //dd($concours);
             //vérifier que ce concours n'est pas utilisé dans un type
             $types = $concours->getTypes();
-            if(count($types) > 0){
+            $i = 0;
+            foreach($types as $type){
+                $i++;
+            }
+            if($i > 0){
+                //dd($types);
                 $this->addFlash(
                     'warning',
                     'Impossible de supprimer ce concours qui est utilisé dans au moins un type'

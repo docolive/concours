@@ -30,12 +30,6 @@ class Categorie
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Concours::class, inversedBy="categories")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $concours;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Type::class, inversedBy="categories")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -76,18 +70,6 @@ class Categorie
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getConcours(): ?Concours
-    {
-        return $this->concours;
-    }
-
-    public function setConcours(?Concours $concours): self
-    {
-        $this->concours = $concours;
 
         return $this;
     }
