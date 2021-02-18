@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau mot de passe{% endblock %}
+
+{% block body %}
+    {% for flashError in app.flashes('reset_password_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+    <h4>Nouveau mot de passe</h4>
+
+    {{ form_start(requestForm) }}
+        {{ form_row(requestForm.email) }}
+        <div>
+            <small>
+                Saisissez votre adresse mail et nous vous enverrons un email.
+            </small>
+        </div>
+
+        <button class="btn btn-primary">Envoyer l'email</button>
+    {{ form_end(requestForm) }}
+{% endblock %}

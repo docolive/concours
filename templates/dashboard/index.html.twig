@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Situation candidat{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="/css/dashboard.css">
+{% endblock %}
+{% block body %}
+<div class="wrapper">
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="sidebar-header mb-4 mt-5">
+            <h4>Vos coordonnées</h4>
+        </div>
+        <div id="coordonnees">
+            {% if profil %}
+                {% if profil.raisonSociale %}
+                    {{profil.raisonSociale}}
+                    <br>
+                {% endif %}
+                {% if profil.nom %}
+                    {{profil.nom}} {{profil.prenom}}
+                    <br>
+                {% endif %}
+                {% if profil.adress1 %}
+                    {{profil.adress1}}
+                    <br>
+                {% endif %}
+                {% if profil.adress2 %}
+                    {{profil.adress2}}
+                    <br>
+                {% endif %}
+                {% if profil.adress3 %}
+                    {{profil.adress3}}
+                    <br>
+                {% endif %}
+                {% if profil.adress4 %}
+                    {{profil.adress4}}
+                    <br>
+                {% endif %}
+                {% if profil.adress5 %}
+                    {{profil.adress5}}
+                    <br>
+                {% endif %}
+                {% if profil.phone %}
+                    {{profil.phone}}
+                    <br>
+                {% endif %}
+            <br>
+            <a href="{{path('profil_edit',{'id':profil.id})}}"><button class="btn btn-primary btn-sm">Modifiez vos coordonnées</button></a>
+            {% else %}
+               <a href="{{path('profil_add')}}"><button class="btn btn-warning btn-sm">Complétez vos coordonnées</button></a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Page Content -->
+    <div id="echantillons">
+        {% include "dashboard/_echantillons.html.twig" with {'user': user} %}
+    </div>
+
+</div>    
+{% endblock %}

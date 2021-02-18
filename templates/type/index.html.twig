@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des types{% endblock %}
+
+{% block body %}
+<table class="table table-striped table-borderd">
+<tr>
+<th>ORDRE</th>
+<th>NOM</th>
+<th>VOLUME MIN LOT</th>
+<th>NBRE MAX ECH</th>
+<th>Actions</th>
+</tr>
+{% for type in types %}
+    <tr>
+    <td>{{type.ordre}}</td>
+    <td>{{type.nom}}</td>
+    <td>{{type.volMinLot}}</td>
+    <td>{{type.nbreMaxEch}}</td>
+    <td>
+    <a href="{{ path('type_edit', {'id': type.id}) }}">
+    <button class="btn btn-primary btn-sm py-0" style="font-size: 0.8em;">Modifier</button></a>
+    {% include "type/_delete_form.html.twig" %}
+    </td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}

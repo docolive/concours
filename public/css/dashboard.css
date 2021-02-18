@@ -1,0 +1,25 @@
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    
+}
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    min-height: 100vh;
+    background: #7386D5;
+    color: #fff;
+}
+#coordonnees {
+    padding:5px; 
+    border:1px solid white;
+    border-radius:5px; 
+    margin:5px;
+}
+#echantillons {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
