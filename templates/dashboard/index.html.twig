@@ -51,14 +51,16 @@
             <br>
             <a href="{{path('profil_edit',{'id':profil.id})}}"><button class="btn btn-primary btn-sm">Modifiez vos coordonnées</button></a>
             {% else %}
+            <div class="text-center">
                <a href="{{path('profil_add')}}"><button class="btn btn-warning btn-sm">Complétez vos coordonnées</button></a>
+            </div>
             {% endif %}
         </div>
     </div>
 
     <!-- Page Content -->
     <div id="echantillons">
-        {% include "dashboard/_echantillons.html.twig" with {'user': user} %}
+        {% include "dashboard/_echantillons.html.twig" with {'echantillons': echantillons} %}
     </div>
 
 </div>

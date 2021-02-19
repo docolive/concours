@@ -23,7 +23,7 @@ class EchantillonController extends AbstractController
     public function __construct(ConcoursSession $concoursSession){
         $this->session = $concoursSession;
     }
-    
+
     /**
      * @Route("/", name="echantillon_index", methods={"GET"})
      */
@@ -65,7 +65,7 @@ class EchantillonController extends AbstractController
             $entityManager->persist($echantillon);
             $entityManager->flush();
 
-            return $this->redirectToRoute('echantillon_index');
+            return $this->redirectToRoute('dashboard');
         }
 
         return $this->render('echantillon/add.html.twig', [
@@ -90,7 +90,8 @@ class EchantillonController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('echantillon_index');
+            return $this->redirectToRoute('dashboard');
+
         }
 
         return $this->render('echantillon/add.html.twig', [
@@ -112,6 +113,7 @@ class EchantillonController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('echantillon_index');
+        return $this->redirectToRoute('dashboard');
+
     }
 }

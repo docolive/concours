@@ -1,0 +1,13 @@
+{% extends "base.html.twig" %}
+{% block body %}
+<div class="alert alert-info text-center" style="margin-top:50px">
+Un email vient de vous être envoyé.
+<br>
+Il contient le lien d'activation de votre inscription.
+<br>
+Si vous ne le trouvez pas, merci de vérifier dans votre courrier indésirable.
+<div class="mt-5">
+<a href="{{path('dashboard')}}"><button class="btn btn-primary">Continuer</button></a>
+</div>
+</div>
+{% endblock %}

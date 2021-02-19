@@ -35,6 +35,8 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+           
+            
             // encode the plain password
             $user->setPassword(
                 $passwordEncoder->encodePassword(
@@ -53,18 +55,22 @@ class RegistrationController extends AbstractController
                 (new TemplatedEmail())
                     ->from(new Address('contact@franceolive.com', 'Concours'))
                     ->to($user->getEmail())
-                    ->subject('Merci de confirmer votre enregistrement au Concours')
+                    ->subject('Merci de confirmer votre inscription au Concours')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
             // do anything else you need here, like send an email
 
-            return $guardHandler->authenticateUserAndHandleSuccess(
-                $user,
-                $request,
-                $authenticator,
-                'main' // firewall name in security.yaml
-            );
-        }
+            // return $guardHandler->authenticateUserAndHandleSuccess(
+            //     $user,
+            //     $request,
+            //     $authenticator,
+            //     'main' // firewall name in security.yaml
+            // );
+            return $this->render('registration/wait_confirm.html.twig',array(
+                'user'=>$user
+            ));
+        
+    }
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
@@ -90,6 +96,6 @@ class RegistrationController extends AbstractController
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Votre adresse mail est correcte !');
 
-        return $this->redirectToRoute('app_register');
+        return $this->redirectToRoute('dashboard');
     }
 }

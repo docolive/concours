@@ -23,7 +23,7 @@ class CategorieController extends AbstractController
     private $session;
     public function __construct(ConcoursSession $concoursSession){
         $this->session = $concoursSession;
-    }
+    } 
     
     /**
      * @Route("/", name="categorie_index", methods={"GET"})

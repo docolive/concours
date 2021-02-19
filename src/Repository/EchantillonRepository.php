@@ -19,22 +19,42 @@ class EchantillonRepository extends ServiceEntityRepository
         parent::__construct($registry, Echantillon::class);
     }
 
-    // /**
-    //  * @return Echantillon[] Returns an array of Echantillon objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+    * @return Echantillon[] Returns an array of Echantillon objects
+    */
+    
+    public function findAllEchUser($user,$concours)
     {
         return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
+            ->innerJoin('e.categorie','c')
+            ->innerJoin('c.type','t','WITH','t.concours = :concours')
+            ->where('e.user = :user')
+            ->setParameter('concours', $concours)
+            ->setParameter('user', $user)
+            ->orderBy('e.categorie', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
+
+     /**
+    * @return Echantillon[] Returns an array of Echantillon objects
     */
+    
+    public function findEchMemeType($user,$type)
+    {
+        return $this->createQueryBuilder('e')
+            ->innerJoin('e.categorie','c')
+            ->innerJoin('c.type','t','WITH','c.type = :type')
+            ->where('e.user = :user')
+            ->setParameter('type', $type)
+            ->setParameter('user', $user)
+            ->orderBy('e.categorie', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    
 
     /*
     public function findOneBySomeField($value): ?Echantillon
