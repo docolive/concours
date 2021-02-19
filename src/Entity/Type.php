@@ -55,6 +55,16 @@ class Type
      */
     private $unite;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $otable;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $varieteot;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -163,6 +173,30 @@ class Type
     public function setUnite(string $unite): self
     {
         $this->unite = $unite;
+
+        return $this;
+    }
+
+    public function getOtable(): ?bool
+    {
+        return $this->otable;
+    }
+
+    public function setOtable(bool $otable): self
+    {
+        $this->otable = $otable;
+
+        return $this;
+    }
+
+    public function getVarieteot(): ?string
+    {
+        return $this->varieteot;
+    }
+
+    public function setVarieteot(?string $varieteot): self
+    {
+        $this->varieteot = $varieteot;
 
         return $this;
     }
