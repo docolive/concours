@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Entity\Echantillon;
 use App\Form\EchantillonType;
 use App\Service\ConcoursSession;
+use App\Form\EchantillonEditType;
 use App\Repository\ConcoursRepository;
 use App\Repository\CategorieRepository;
 use App\Repository\EchantillonRepository;
@@ -102,7 +103,7 @@ class EchantillonController extends AbstractController
         if($concours == 'vide'){
             return $this->redirectToRoute('concours_choix');
         }
-        $form = $this->createForm(EchantillonType::class, $echantillon);
+        $form = $this->createForm(EchantillonEditType::class, $echantillon);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

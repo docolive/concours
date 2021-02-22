@@ -13,7 +13,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class EchantillonType extends AbstractType
+class EchantillonEditType extends AbstractType
 {
     private $concoursId;
 
@@ -65,7 +65,7 @@ class EchantillonType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Echantillon::class,
-            'validation_groups' => ['add'],
+            
         ]);
     }
 }

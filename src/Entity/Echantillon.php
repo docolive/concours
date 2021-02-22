@@ -22,7 +22,7 @@ class Echantillon
     /**
      * @ORM\ManyToOne(targetEntity=Categorie::class, inversedBy="echantillons")
      * @ORM\JoinColumn(nullable=false)
-     * @MyAssert\NbreMaxEch
+     * @MyAssert\NbreMaxEch(groups={"add"})
      */
     private $categorie;
 

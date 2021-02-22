@@ -6,13 +6,17 @@
 <table class="table table-striped table-borderd" style="margin:10px">
 <tr>
 <th>Catégorie</th>
+<th>Description</th>
 <th>Lot</th>
+<th>Volume</th>
 <th>Actions</th>
 </tr>
 {% for echantillon in echantillons %}
     <tr>
-    <td>{{echantillon.categorie.name}}</td>
+    <td style="text-align:left">{{echantillon.categorie.name}} {{echantillon.variety}}</td>
+    <td>{{echantillon.description}}</td>
     <td>{{echantillon.lot}}</td>
+    <td>{{echantillon.volume|number_format(0, ',', ' ')}} {{echantillon.categorie.type.unite}}</td>
     <td>
     <a href="{{ path('echantillon_edit', {'id': echantillon.id}) }}">
     <button class="btn btn-primary btn-sm py-0" style="font-size: 0.8em;">Modifier</button></a>
