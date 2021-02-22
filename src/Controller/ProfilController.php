@@ -43,7 +43,7 @@ class ProfilController extends AbstractController
         ]);
     }
     /**
-     * @Route("/{id}/edit", name="profil_edit", methods={"GET","POST"})
+     * @Route("/profil/{id}/edit", name="profil_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Profil $profil): Response
     {

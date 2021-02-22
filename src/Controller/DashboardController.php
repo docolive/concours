@@ -8,6 +8,7 @@ use App\Repository\EchantillonRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -20,6 +21,20 @@ class DashboardController extends AbstractController
     }
 
     /**
+     * @Route("/ajax/checkOT", name="checkOT", methods={"POST"})
+     */
+    public function checkOTAjax(Request $request, CategorieRepository $categorieRepository): Response
+    {
+        $categorieId = $request->request->get('categorieId');
+        $categorie = $categorieRepository->find($categorieId);
+        if(!is_null($categorie)){
+            return new Response($categorie->getType()->getOtable());
+        }else{
+            return new Response('false');
+        }
+    }
+
+    /**
      * @Route("/ajax", name="cherche_vol_min_ajax", methods={"POST"})
      */
     public function chercheVolMinAjax(Request $request, CategorieRepository $categorieRepository): Response
@@ -27,8 +42,11 @@ class DashboardController extends AbstractController
         $categorieId = $request->request->get('categorieId');
 
         $categorie = $categorieRepository->find($categorieId);
-        
-        return new Response($categorie->getType()->getVolMinLot());
+        if(!is_null($categorie)){
+            return new Response($categorie->getType()->getVolMinLot());
+        }else{
+            return new Response(10000000);
+        }
     }
 
     /**
@@ -43,8 +61,11 @@ class DashboardController extends AbstractController
         //dd($type);
 
         $user = $this->getUser();
+        if($type->getOtable()){
 
-        $echs = $echantillonRepository->findEchMemeType($user,$type);
+        }else{
+            $echs = $echantillonRepository->findEchMemeType($user,$type);
+        }
 
         return new Response(count($echs) + 1);
     }
@@ -78,9 +99,19 @@ class DashboardController extends AbstractController
 
         //récupération de l'user
         $user = $this->getUser();
-        //dd($user);
+        $mail = $user->getEmail();
         if(!$user->isVerified()){
-            dd('halte');
+            $this->addFlash(
+                'warning',
+                "Votre adresse mail n'a pas encore été vérifiée. Merci de lire le mail que nous avons envoyé à l'adresse $mail lors de votre inscription."
+            );
+            $this->addFlash(
+                'warning',
+                'Le sujet du mail est "Merci de confirmer votre inscription au Concours"'
+            );
+            return $this->render('dashboard/missingmail.html.twig',[
+                'mail' => $mail
+            ]);
         }
         //récupération du profil
         $profil = $user->getProfil();

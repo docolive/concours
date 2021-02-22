@@ -1,15 +1,16 @@
-.wrapper {
+.page {
     display: flex;
     width: 100%;
-    align-items: stretch;
+    /* align-items: stretch; */
+    justify-content: space-between;
     
 }
 #sidebar {
-    min-width: 250px;
-    max-width: 250px;
+    width: 25%;
     min-height: 100vh;
     background: #7386D5;
     color: #fff;
+    margin-right: 1em;
 }
 #coordonnees {
     padding:5px; 
@@ -17,7 +18,14 @@
     border-radius:5px; 
     margin:5px;
 }
-#echantillons {
+.center-page {
+    justify-content: center;
+    display: flex;
     width: 100%;
-   
+    min-height: 100vh;
+}
+
+#validation{
+    text-align: center;
+    margin-top: 20px;
 }

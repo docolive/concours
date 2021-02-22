@@ -17,6 +17,8 @@ class TypeType extends AbstractType
             ->add('vol_min_lot')
             ->add('unite')
             ->add('nbre_max_ech')
+            ->add('nbre_max_ech')
+            ->add('otable')
         ;
     }
 

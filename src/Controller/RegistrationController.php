@@ -3,17 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
+use App\Form\RegistrationFormType;
+use Symfony\Component\Mime\Address;
 use App\Security\AppUserAuthenticator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
@@ -50,14 +51,8 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('contact@franceolive.com', 'Concours'))
-                    ->to($user->getEmail())
-                    ->subject('Merci de confirmer votre inscription au Concours')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
+            $this->send($user);
+           
             // do anything else you need here, like send an email
 
             // return $guardHandler->authenticateUserAndHandleSuccess(
@@ -88,9 +83,9 @@ class RegistrationController extends AbstractController
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
         } catch (VerifyEmailExceptionInterface $exception) {
-            $this->addFlash('verify_email_error', $exception->getReason());
+            $this->addFlash('error', $exception->getReason());
 
-            return $this->redirectToRoute('app_register');
+            return $this->redirectToRoute('dashboard');
         }
 
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
@@ -98,4 +93,58 @@ class RegistrationController extends AbstractController
 
         return $this->redirectToRoute('dashboard');
     }
+
+    /**
+     * @Route("/send/email", name="app_send_verify_email")
+     */
+    public function send(){
+        $user = $this->getUser();
+         // generate a signed url and email it to the user
+         $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+         (new TemplatedEmail())
+             ->from(new Address('contact@franceolive.com', 'Concours'))
+             ->to($user->getEmail())
+             ->subject('Merci de confirmer votre inscription au Concours')
+             ->htmlTemplate('registration/confirmation_email.html.twig')
+     );
+     return $this->render('registration/wait_confirm.html.twig',array(
+        'user'=>$user
+    ));
+    }
+
+    /**
+     * @Route("/edit/email", name="edit_email")
+     */
+    public function editMail(Request $request){
+        $user = $this->getUser();
+        $form = $this->createFormBuilder($user)
+        ->add('email',EmailType::class,array(
+            'attr' => array(
+                'placeholder'=>"Votre email",
+                'autofocus' => true,
+                'required' => true
+                 ),
+            'label' => false
+        ))
+            
+            //->add('save', SubmitType::class, ['label' => 'Create Task'])
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+            // dd($user);
+            
+           
+            return $this->redirectToRoute('dashboard');
+        }
+
+     return $this->render('registration/editmail.html.twig',array(
+        'form' => $form->createView(),
+    ));
+    }
+
 }

@@ -8,7 +8,7 @@
 
 {% if is_granted('ROLE_ADMIN') == false %}
 
-<div class="wrapper">
+<div class="page">
     <!-- Sidebar -->
     <div id="sidebar">
         <div class="sidebar-header mb-4 mt-5">
@@ -55,12 +55,24 @@
                <a href="{{path('profil_add')}}"><button class="btn btn-warning btn-sm">Complétez vos coordonnées</button></a>
             </div>
             {% endif %}
+            <div class="text-center mt-5">
+                <a href="{{path('app_logout')}}"><button class="btn btn-secondary btn-sm">Déconnexion</button></a>
+            </div>
         </div>
     </div>
 
     <!-- Page Content -->
+    <div class="center-page">
+    <div class="">
     <div id="echantillons">
         {% include "dashboard/_echantillons.html.twig" with {'echantillons': echantillons} %}
+    </div>
+    {% if echantillons | length > 0 %}
+    <div id="validation">
+        <a href="{{path('validation_phase1')}}"><button class="btn btn-warning btn-sm">Valider l'inscription des échantillons</button></a>
+    </div>
+    {% endif %}
+    </div>
     </div>
 
 </div>

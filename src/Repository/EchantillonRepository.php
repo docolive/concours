@@ -37,7 +37,7 @@ class EchantillonRepository extends ServiceEntityRepository
         ;
     }
 
-     /**
+    /**
     * @return Echantillon[] Returns an array of Echantillon objects
     */
     
@@ -49,6 +49,24 @@ class EchantillonRepository extends ServiceEntityRepository
             ->where('e.user = :user')
             ->setParameter('type', $type)
             ->setParameter('user', $user)
+            ->orderBy('e.categorie', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+    * @return Echantillon[] Returns an array of Echantillon objects
+    */
+    
+    public function findEchConcours($concours)
+    {
+        return $this->createQueryBuilder('e')
+            ->innerJoin('e.categorie','c')
+            ->innerJoin('c.type','t','WITH','t.concours = :concours')
+            // ->innerJoin('e.user','u')
+            // ->innerJoin('u.profil','p')
+            ->setParameter('concours', $concours)
             ->orderBy('e.categorie', 'ASC')
             ->getQuery()
             ->getResult()

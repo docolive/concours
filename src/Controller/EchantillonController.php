@@ -33,14 +33,28 @@ class EchantillonController extends AbstractController
         if($concours == 'vide'){
             return $this->redirectToRoute('concours_choix');
         }
+        $echantillons = $echantillonRepository->findEchConcours($concours);
+        //dd($concours);
         return $this->render('echantillon/index.html.twig', [
             'concours' => $concours,
-            'echantillons' => $echantillonRepository
-            ->findBy(
-                array(),
-                array('categorie' => 'ASC')
-            )
+            'echantillons' => $echantillons
         ]);
+    }
+
+    public function codePublic($categorie): string
+    {
+            $repo = $this->getDoctrine()->getRepository(Echantillon::class);
+            $random = rand(1,100);
+            $shuffled = str_shuffle('ABCDEFGHIJKLM');
+            $codePublic = $categorie.'-'.$random.'-'.substr($shuffled,0,3);
+            $existe = $repo->findBy(
+                ['public_ref' => $codePublic]
+            );
+            if(empty($existe)){
+                return $codePublic;
+            }else{
+                $this->codePublic($categorie);
+            }
     }
 
     /**
@@ -58,7 +72,10 @@ class EchantillonController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
            //code public
-            $echantillon->setPublicRef('APOAI');
+            $categorie = $echantillon->getCategorie()->getId();
+            $codePublic = $this->codePublic($categorie);
+            //dd($codePublic);
+            $echantillon->setPublicRef($codePublic);
             $user = $this->getUser();
             $echantillon->setUser($user);
             $entityManager = $this->getDoctrine()->getManager();
@@ -72,6 +89,7 @@ class EchantillonController extends AbstractController
             'categorie' => $echantillon,
             'concours' => $concours,
             'form' => $form->createView(),
+            'add' => true
         ]);
     }
 

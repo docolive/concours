@@ -8,41 +8,41 @@
 
 {% block javascripts %}
 <script>
+OT = false;
+test = false;
 $(function() {
-    $("#enregistreur").click(function(){
-        var categorie = $("#echantillon_categorie" ).val();
-        var volume = $("#echantillon_volume" ).val();
-        //recupération type volume min
-        var path = "{{path('cherche_vol_min_ajax') }}";
-        $.post(path, { categorieId: categorie },function(data){
-            var minVol = parseFloat(data);
-            if(minVol > volume){
-                alert("Le volume du lot est inférieur à ce que prévoit le Réglement du Concours pour cette catégorie");
-            }else{
-                //vérification du nombre d'échantillons dans le type
-                var path = "{{path('cherche_nbre_ech_ajax') }}";
-                $.post(path, { categorieId: categorie },function(data){
-                    var nbre = parseFloat(data);
-                    var path = "{{path('cherche_max_type_ajax') }}";
-                    $.post(path, { categorieId: categorie },function(data){
-                        var max = parseFloat(data);
-                        if(nbre > max){
-                            alert("Vous ne pouvez pas enregistrer cet échantillon dans cette catégorie, car vous dépasseriez alors le nombre maximum d'échantillons" );
-                        }else{
-                            var lot = $('#echantillon_lot').val().length;
-                        console.log(lot);
+    
+    $("#echantillon_variety").hide();
+    var categorieId = $("#echantillon_categorie" ).val();
+        categorieTypeIsOT(categorieId);
 
-                            if(lot > 0){
-                                $("form[name='echantillon']").submit();
-                            }else{
-                                alert("Le numéro du lot est obligatoire");
-                            }
-                        }
-                    });
-                });
+    $("#echantillon_categorie").change(function(){
+        var categorieId = $("#echantillon_categorie" ).val();
+        categorieTypeIsOT(categorieId);
+    });
+    
+    
+    /**
+    * faire apparaître l'input variety lorsque le type est oliveOt
+    * et réciproquement
+    */
+    function categorieTypeIsOT(categorieId){
+        var path = "{{path('checkOT')}}";
+        $.post(path, { categorieId: categorieId },function(data){
+            if(data == 1){
+                $("#echantillon_variety").show();
+                 OT = true;
+            }else{
+                $("#echantillon_variety").val("");
+                $("#echantillon_variety").hide();
+                OT = false;
             }
         });
-    });
+    }
+    
+
 });
+       
 </script>
 {% endblock %}
+

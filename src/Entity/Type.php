@@ -58,7 +58,7 @@ class Type
     /**
      * @ORM\Column(type="boolean")
      */
-    private $otable;
+    private $otable = false;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)

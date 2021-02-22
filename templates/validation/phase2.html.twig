@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Validation échantillons{% endblock %}
+
+{% block body %}
+<table class="table table-striped table-borderd" style="margin:10px">
+<tr>
+<th>Catégorie</th>
+<th>Lot</th>
+<th>Actions</th>
+</tr>
+{% for echantillon in echantillons %}
+    <tr>
+    <td>{{echantillon.categorie.name}}</td>
+    <td>{{echantillon.lot}}</td>
+    <td>
+    <a href="{{ path('echantillon_edit', {'id': echantillon.id}) }}">
+    <button class="btn btn-primary btn-sm py-0" style="font-size: 0.8em;">Modifier</button></a>
+    {% include "echantillon/_delete_form.html.twig" %}
+    </td>
+    </tr>
+{% endfor %}
+</table>
+<div style="width:500px; font-size:80%">
+Participation :
+<table class="table table-bordered">
+<tr>
+<th>Echantillons</th>
+<th>Coût unitaire HT</th>
+<th>Total HT</th>
+<th>taux TVA</th>
+<th>Total TTC</th>
+</tr>
+<tr>
+<td>{{echantillons|length}}</td>
+<td>{{concours.cout|format_currency('EUR',locale='fr')}}</td>
+<td>{{HT|format_currency('EUR',locale='fr')}}</td>
+<td>{{tauxTVA|number_format(2, ',', ',')}} %</td>
+<td style="font-weight:bold">{{TTC|format_currency('EUR',locale='fr')}}</td>
+</tr>
+</table>
+<br>
+
+</div>
+{% endblock %}

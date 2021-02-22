@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\EchantillonRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator as MyAssert;
 
 /**
  * @ORM\Entity(repositoryClass=EchantillonRepository::class)
@@ -20,6 +22,7 @@ class Echantillon
     /**
      * @ORM\ManyToOne(targetEntity=Categorie::class, inversedBy="echantillons")
      * @ORM\JoinColumn(nullable=false)
+     * @MyAssert\NbreMaxEch
      */
     private $categorie;
 
@@ -53,6 +56,37 @@ class Echantillon
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $variety;
+
+     /**
+     * @Assert\IsTrue(message="Merci d'indiquer le nom de la variété d'olives de table.")
+     */
+    public function isVarietyWithTable()
+    {
+        if($this->categorie->getType()->getOtable() == true && empty($this->variety)){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    /**
+     * @Assert\IsTrue(message="Le volume du lot est inférieur au volume minimal dans cette catégorie.")
+     */
+    public function isVolOK()
+    {
+        if($this->categorie->getType()->getVolMinLot() > $this->volume){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+
 
     public function getId(): ?int
     {
@@ -139,6 +173,18 @@ class Echantillon
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getVariety(): ?string
+    {
+        return $this->variety;
+    }
+
+    public function setVariety(?string $variety): self
+    {
+        $this->variety = $variety;
 
         return $this;
     }
