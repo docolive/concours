@@ -15,8 +15,11 @@
     </head>
     <body>
    
-     {% if is_granted('ROLE_ADMIN') %}
+    {% if is_granted('ROLE_ADMIN') %}
         {% include "navbar.html.twig" %}
+    {% endif %}
+    {% if is_granted('ROLE_CANDIDAT') %}
+        {% include "navbarCandidat.html.twig" %}
     {% endif %}
     {% for message in app.flashes('error') %}
         <div class="alert alert-danger text-center">
@@ -25,6 +28,11 @@
     {% endfor %}
     {% for message in app.flashes('warning') %}
         <div class="alert alert-warning text-center">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success text-center">
             {{ message }}
         </div>
     {% endfor %}

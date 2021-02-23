@@ -4,7 +4,6 @@ namespace App\Controller;
 use App\Entity\Echantillon;
 use App\Form\EchantillonType;
 use App\Service\ConcoursSession;
-use App\Form\EchantillonEditType;
 use App\Repository\ConcoursRepository;
 use App\Repository\CategorieRepository;
 use App\Repository\EchantillonRepository;
@@ -13,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Form\EchantillonEditType;
 
 /**
  * @Route("/echantillon")

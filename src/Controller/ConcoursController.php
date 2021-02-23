@@ -4,19 +4,41 @@ namespace App\Controller;
 
 use App\Entity\Concours;
 use App\Form\ConcoursType;
-use App\Repository\ConcoursRepository;
 use App\Service\ConcoursSession;
+use App\Repository\ConcoursRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 
 /**
  * @Route("/admin/concours")
  */
 class ConcoursController extends AbstractController
 {
+    private $session;
+    public function __construct(ConcoursSession $concoursSession){
+        $this->session = $concoursSession;
+    }
+
+    /**
+     * @Route("/reglt", name="concours_reglt")
+     * @IsGranted("ROLE_CANDIDAT")
+     */
+    public function voirReglt(ConcoursRepository $concoursRepository): Response
+    {
+        $concours = $this->session->recup();
+        if($concours == 'vide'){
+            return $this->redirectToRoute('concours_choix');
+        }
+
+        $file = 'reglements/brignoles-2021.pdf';
+        return new BinaryFileResponse($file);
+
+    }
     /**
      * @Route("/", name="concours_index", methods={"GET"})
      * @IsGranted("ROLE_ADMIN")

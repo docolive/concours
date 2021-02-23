@@ -2,8 +2,12 @@
 
 namespace App\Controller;
 
-use App\Repository\EchantillonRepository;
+use App\Entity\Echantillon;
+use App\Service\PDFService;
 use App\Service\ConcoursSession;
+use Symfony\Component\Mime\Email;
+use App\Repository\EchantillonRepository;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -17,9 +21,50 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ValidationController extends AbstractController
 {
     private $session;
-    public function __construct(ConcoursSession $concoursSession){
+    private $pdf;
+    public function __construct(ConcoursSession $concoursSession, PDFService $pdf){
         $this->session = $concoursSession;
+        $this->pdf = $pdf;
     }
+
+     /**
+     * @Route("/pdf", name="validation_pdf")
+     */
+    public function pdf(EchantillonRepository $echantillonRepository): Response
+    {
+        $concours = $this->session->recup();
+        $user = $this->getUser();
+        $echantillons = $echantillonRepository->findAllEchUser($user,$concours);
+        return new Response($this->pdf->bulletin($concours,$user,$echantillons));
+    }
+
+    /**
+     * @Route("/email")
+     */
+    public function sendEmail(MailerInterface $mailer)
+    {
+        $user = $this->getUser();
+        $email = (new Email())
+            ->from('contact@franceolive.com')
+            ->to($user->getEmail())
+            //->cc('cc@example.com')
+            //->bcc('bcc@example.com')
+            //->replyTo('fabien@example.com')
+            //->priority(Email::PRIORITY_HIGH)
+            ->subject('Bulletin de participation au concours ')
+            ->text('Sending emails is fun again!')
+            ->html('<p>See Twig integration for better HTML integration!</p>')
+            ->attachFromPath($_SERVER['DOCUMENT_ROOT'].'bulletin_inscription_concours'.$user->getId().'.pdf','bulletin_participation_concours')
+;
+
+        $mailer->send($email);
+        $this->addFlash(
+            'success',
+            'Un email contenant votre bulletin de participation vous a été envoyé.'
+        );
+        return $this->redirectToRoute('dashboard');
+    }
+
     /**
      * @Route("/phase1", name="validation_phase1")
      */
