@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Livraison;
+use App\Validator as MyAssert;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\EchantillonRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Validator as MyAssert;
 
 
 /**
@@ -77,12 +78,12 @@ class Echantillon
     /**
      * @ORM\Column(type="boolean")
      */
-    private $paye;
+    private $paye = false;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $recu;
+    private $recu = false;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -98,11 +99,6 @@ class Echantillon
      * @ORM\ManyToOne(targetEntity=Livraison::class, inversedBy="echantillons")
      */
     private $livraison;
-
-    public function __construct()
-    {
-        $this->livraison = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
