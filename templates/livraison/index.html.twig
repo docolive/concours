@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des dépôts{% endblock %}
+
+{% block body %}
+<a href="{{path('livraison_add')}}"><button class="btn btn-success">Créer un dépôt</button></a>
+
+<table class="table table-striped table-bordered">
+<tr>
+<th>Nom</th>
+<th>Adresse</th>
+<th>Téléphone</th>
+<th>Horaires</th>
+<th>Actions</th>
+</tr>
+{% for l in livraisons %}
+    <tr>
+    <td>{{l.name}}</td>
+    <td>
+    {{l.adress1}}<br>
+    {{l.adress2}}<br>
+    {{l.adress3}}<br>
+    </td>
+    <td>{{l.phone}}</td>
+    <td>{{l.horaire}}</td>
+    <td>
+    <a href="{{ path('livraison_edit', {'id': l.id}) }}">
+    <button class="btn btn-primary btn-sm py-0" style="font-size: 0.8em;"><i class="fas fa-edit"></i></button></a>
+    {% include "livraison/_delete_form.html.twig" %}
+    </td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}

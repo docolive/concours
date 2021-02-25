@@ -14,7 +14,7 @@
                     <li><a class="dropdown-item" href="{{path('concours_index')}}">Concours</a></li>
                     <li><a class="dropdown-item" href="{{path('type_index')}}">Types de produits</a></li>
                     <li><a class="dropdown-item" href="{{path('categorie_index')}}">Catégories</a></li>
-                    <li><a class="dropdown-item" href="{{path('concours_regl')}}" target="_blank">Réglement du Concours</a></li>
+                    <li><a class="dropdown-item" href="{{path('concours_reglt')}}" target="_blank">Réglement du Concours</a></li>
                    
                 </ul>
                 </li>
@@ -24,8 +24,40 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="{{path('echantillon_index')}}">Liste</a></li>
-                    <li><a class="dropdown-item" href="{{path('type_index')}}">Types de produits</a></li>
-                    <li><a class="dropdown-item" href="{{path('categorie_index')}}">Catégories</a></li>
+                   
+                </ul>
+                </li>
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Inscrits
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {# <li><a class="dropdown-item" href="{{path('user_index')}}">Liste de tous les utilisateurs</a></li> #}
+                    <li><a class="dropdown-item" href="{{path('jure_index')}}">Liste jurés</a></li>
+                    <li><a class="dropdown-item" href="{{path('candidat_index')}}">Liste des candidats</a></li>
+                    <li><a class="dropdown-item" href="{{path('user_add')}}">Ajouter</a></li>
+                   
+                </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Dépôts
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{{path('livraison_index')}}">Liste</a></li>
+                    <li><a class="dropdown-item" href="{{path('livraison_add')}}">Ajouter</a></li>
+                   
+                </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Modes de paiement
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{{path('paiement_index')}}">Liste</a></li>
+                    <li><a class="dropdown-item" href="{{path('paiement_add')}}">Ajouter</a></li>
                    
                 </ul>
                 </li>

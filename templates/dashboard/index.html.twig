@@ -8,10 +8,10 @@
 
 {% if is_granted('ROLE_ADMIN') == false %}
 
-<div class="page">
+<div class="d-flex flex-wrap mb-5" style="width:100%">
     <!-- Sidebar -->
-    <div id="sidebar">
-        <div class="sidebar-header mb-4 mt-5">
+    <div style="width:25%; background: #7386D5;color: #fff;">
+        <div class=" mb-4 mt-5">
             <h4>Vos coordonnées</h4>
         </div>
         <div id="coordonnees">
@@ -48,13 +48,21 @@
                     {{profil.phone}}
                     <br>
                 {% endif %}
+                {% if profil.jure %}
+            <div class="mt-5">
+                 Vous avez demandé à être juré(e))
+            </div>
+            {% endif %}
             <br>
+            
             <a href="{{path('profil_edit',{'id':profil.id})}}"><button class="btn btn-primary btn-sm">Modifiez vos coordonnées</button></a>
             {% else %}
             <div class="text-center">
                <a href="{{path('profil_add')}}"><button class="btn btn-warning btn-sm">Complétez vos coordonnées</button></a>
             </div>
             {% endif %}
+
+            
             <div class="text-center mt-5">
                 <a href="{{path('app_logout')}}"><button class="btn btn-secondary btn-sm">Déconnexion</button></a>
             </div>
@@ -62,19 +70,32 @@
     </div>
 
     <!-- Page Content -->
-    <div class="center-page">
-    <div class="">
-    <div id="echantillons">
-        {% include "dashboard/_echantillons.html.twig" with {'echantillons': echantillons} %}
-    </div>
-    {% if echantillons | length > 0 %}
-    <div id="validation">
-        <a href="{{path('validation_phase1')}}"><button class="btn btn-warning btn-sm">Valider l'inscription des échantillons</button></a>
-    </div>
-    {% endif %}
-    </div>
-    </div>
-
+    <div class="mt-4" style="width:75%">
+        <div class="d-flex justify-content-around flex-wrap" style="width:100%">
+            {% if profil|length == 0 %}
+                <a href="{{path('profil_add')}}"><button class="btn btn-info" >M'inscrire comme juré(e)</button></a>
+            {% else %}
+                {% if profil.jure %}
+                    <a href="{{path('profil_edit')}}"><button class="btn btn-info">Modifier mon inscription comme juré(e)</button></a> 
+                {% else %}
+                    
+                        <a href="{{path('profil_edit')}}"><button class="btn btn-info" >M'inscrire comme juré(e)</button></a> 
+                        
+                        {% endif %}
+                    {% endif %}
+                    
+                    <a href="{{path('echantillon_add')}}"><button class="btn btn-info">Ajouter un échantillon</button></a>
+                    <div class="mt-5" style="width:95%">
+                    {% include "dashboard/_echantillons.html.twig" with {'echantillons': echantillons} %}
+                    </div>
+                {% if echantillons | length > 0 %}
+                
+                    <a href="{{path('validation_phase1')}}"><button class="btn btn-warning">Valider l'inscription des échantillons</button></a>
+                {% endif %} 
+        </div>
+    </div>    
 </div>
+
+
 {% endif %}    
 {% endblock %}

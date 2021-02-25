@@ -67,7 +67,25 @@ class EchantillonController extends AbstractController
         if($concours == 'vide'){
             return $this->redirectToRoute('concours_choix');
         }
+        $user = $this->getUser();
+        if($user->getProfil()){
+            $SIRET = $user->getProfil()->getSiret();
+            if(strlen($SIRET) == 0){
+                $this->addFlash(
+                    'error',
+                    'Votre numéro de SIRET est obligatoire pour participer au Concours.'
+                );
+                return $this->redirectToRoute('profil_edit');
+            }
+        }else{
+            $this->addFlash(
+                'error',
+                'Votre numéro de SIRET est obligatoire pour participer au Concours.'
+            );
+            return $this->redirectToRoute('profil_add');
+        }
         $echantillon = new Echantillon();
+        $echantillon->setUser($user);
         $form = $this->createForm(EchantillonType::class, $echantillon);
         $form->handleRequest($request);
 

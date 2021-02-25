@@ -3,7 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\ProfilRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator as MyAssert;
 
 /**
  * @ORM\Entity(repositoryClass=ProfilRepository::class)
@@ -66,6 +70,27 @@ class Profil
      * @ORM\OneToOne(targetEntity=User::class, inversedBy="profil", cascade={"persist", "remove"})
      */
     private $user;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @MyAssert\ChecKSiret
+     */
+    private $siret;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $jure = false;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Categorie::class, inversedBy="jures")
+     */
+    private $choix_degustation;
+
+    public function __construct()
+    {
+        $this->choix_degustation = new ArrayCollection();
+    } //404 833 048 00022
 
     public function getId(): ?int
     {
@@ -188,6 +213,54 @@ class Profil
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getSiret(): ?string
+    {
+        return $this->siret;
+    }
+
+    public function setSiret(?string $siret): self
+    {
+        $this->siret = $siret;
+
+        return $this;
+    }
+
+    public function getJure(): ?bool
+    {
+        return $this->jure;
+    }
+
+    public function setJure(bool $jure): self
+    {
+        $this->jure = $jure;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Categorie[]
+     */
+    public function getChoixDegustation(): Collection
+    {
+        return $this->choix_degustation;
+    }
+
+    public function addChoixDegustation(Categorie $choixDegustation): self
+    {
+        if (!$this->choix_degustation->contains($choixDegustation)) {
+            $this->choix_degustation[] = $choixDegustation;
+        }
+
+        return $this;
+    }
+
+    public function removeChoixDegustation(Categorie $choixDegustation): self
+    {
+        $this->choix_degustation->removeElement($choixDegustation);
 
         return $this;
     }

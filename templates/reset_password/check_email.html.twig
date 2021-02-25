@@ -3,9 +3,12 @@
 {% block title %}Envoi du mail de renouvellement{% endblock %}
 
 {% block body %}
-    <p>
+<div class="d-flex justify-content-center">
+    <div class="alert alert-info mt-5 align-items-center" style="width:50%">
         Nous avons envoyé un email qui contient le lien que vous devrez cliquer pour recréer votre mot de passe
         Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
-    </p>
+    
     <p>Si vous ne recevez pas notre email, merci de vérifier dans votre courrier indésirable, ou bien <a href="{{ path('app_forgot_password_request') }}">de réessayer</a>.</p>
+    </div>
+</div>
 {% endblock %}

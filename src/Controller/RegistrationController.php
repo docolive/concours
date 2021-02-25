@@ -97,8 +97,8 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/send/email", name="app_send_verify_email")
      */
-    public function send(){
-        $user = $this->getUser();
+    public function send($user){
+       // $user = $this->getUser();
          // generate a signed url and email it to the user
          $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
          (new TemplatedEmail())

@@ -1,7 +1,6 @@
 {{ form_start(form) }}
     <div class="row mt-4 d-flex justify-content-center">
 <div class="col-md-6 mb-4">
-
 {{ form_row(form.raison_sociale) }}
 {{ form_row(form.nom) }}
 {{ form_row(form.prenom) }}
@@ -11,6 +10,12 @@
 {{ form_row(form.adress4) }}
 {{ form_row(form.adress5) }}
 {{ form_row(form.phone) }}
+{{ form_row(form.siret) }}
+<div style="border:1px solid #ddd; padding:5px; border-radius:5px">
+{{ form_row(form.jure) }}
+<span style="font-weight:bold">Préférences de dégustation si vous êtes juré(e)</span>
+{{ form_row(form.choix_degustation) }}
+</div>
     <button class="btn btn-success mt-4">{{ button_label|default('Enregistrer') }}</button>
 </div>
 {{ form_end(form) }}

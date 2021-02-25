@@ -2,13 +2,19 @@
 
 namespace App\Entity;
 
-use App\Repository\EchantillonRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\EchantillonRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Validator as MyAssert;
 
+
 /**
  * @ORM\Entity(repositoryClass=EchantillonRepository::class)
+ * @MyAssert\CheckVariety(groups={"add","edit"})
+ * @MyAssert\CheckVolume(groups={"add","edit"})
+ * @MyAssert\CheckNbreEch(groups={"add"})
  */
 class Echantillon
 {
@@ -22,7 +28,6 @@ class Echantillon
     /**
      * @ORM\ManyToOne(targetEntity=Categorie::class, inversedBy="echantillons")
      * @ORM\JoinColumn(nullable=false)
-     * @MyAssert\NbreMaxEch(groups={"add"})
      */
     private $categorie;
 
@@ -38,8 +43,10 @@ class Echantillon
 
     /**
      * @ORM\Column(type="integer")
+     * 
      */
     private $volume;
+    
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -62,31 +69,40 @@ class Echantillon
      */
     private $variety;
 
-     /**
-     * @Assert\IsTrue(message="Merci d'indiquer le nom de la variété d'olives de table.")
+    /**
+     * @ORM\ManyToOne(targetEntity=Paiement::class, inversedBy="echantillons")
      */
-    public function isVarietyWithTable()
-    {
-        if($this->categorie->getType()->getOtable() == true && empty($this->variety)){
-            return false;
-        }else{
-            return true;
-        }
-    }
+    private $paiement;
 
     /**
-     * @Assert\IsTrue(message="Le volume du lot est inférieur au volume minimal dans cette catégorie.")
+     * @ORM\Column(type="boolean")
      */
-    public function isVolOK()
+    private $paye;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $recu;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $observation;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Medaille::class, inversedBy="echantillons")
+     */
+    private $medaille;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Livraison::class, inversedBy="echantillons")
+     */
+    private $livraison;
+
+    public function __construct()
     {
-        if($this->categorie->getType()->getVolMinLot() > $this->volume){
-            return false;
-        }else{
-            return true;
-        }
+        $this->livraison = new ArrayCollection();
     }
-
-
 
     public function getId(): ?int
     {
@@ -185,6 +201,78 @@ class Echantillon
     public function setVariety(?string $variety): self
     {
         $this->variety = $variety;
+
+        return $this;
+    }
+
+    public function getPaiement(): ?Paiement
+    {
+        return $this->paiement;
+    }
+
+    public function setPaiement(?Paiement $paiement): self
+    {
+        $this->paiement = $paiement;
+
+        return $this;
+    }
+
+    public function getPaye(): ?bool
+    {
+        return $this->paye;
+    }
+
+    public function setPaye(bool $paye): self
+    {
+        $this->paye = $paye;
+
+        return $this;
+    }
+
+    public function getRecu(): ?bool
+    {
+        return $this->recu;
+    }
+
+    public function setRecu(bool $recu): self
+    {
+        $this->recu = $recu;
+
+        return $this;
+    }
+
+    public function getObservation(): ?string
+    {
+        return $this->observation;
+    }
+
+    public function setObservation(?string $observation): self
+    {
+        $this->observation = $observation;
+
+        return $this;
+    }
+
+    public function getMedaille(): ?Medaille
+    {
+        return $this->medaille;
+    }
+
+    public function setMedaille(?Medaille $medaille): self
+    {
+        $this->medaille = $medaille;
+
+        return $this;
+    }
+
+    public function getLivraison(): ?Livraison
+    {
+        return $this->livraison;
+    }
+
+    public function setLivraison(?Livraison $livraison): self
+    {
+        $this->livraison = $livraison;
 
         return $this;
     }

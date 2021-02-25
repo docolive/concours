@@ -3,10 +3,10 @@
 {% block title %}Validation échantillons{% endblock %}
 
 {% block body %}
-{% include "/dashboard/_liste_echantillons.html.twig" with echantillons %}
+{# {% include "/dashboard/_liste_echantillons.html.twig" with echantillons %} #}
 
-<div style="width:500px; font-size:80%">
-Participation :
+<div style="padding-top:50px;margin:auto;">
+<h4 style="text-align:center">Frais de participation</h4>
 <table class="table table-bordered">
 <tr>
 <th>Echantillons</th>
@@ -24,6 +24,24 @@ Participation :
 </tr>
 </table>
 <br>
+
+{{form_start(form)}}
+<div class="row">
+        <div class="col">
+        <h4 style="text-align:center">Choix du lieu de dépôt des échantillons</h4>
+            {{ form_row(form.depot) }}
+        </div>
+        <div class="col">
+        <h4 style="text-align:center">Choix du mode de paiement</h4>
+            {{ form_row(form.paie) }}
+        </div>
+</div>
+<div class="row">
+<div class="col text-center">
+{{form_end(form)}}
+</div>
+</div>
+
 
 </div>
 {% endblock %}

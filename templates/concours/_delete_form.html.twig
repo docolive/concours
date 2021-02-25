@@ -1,5 +1,5 @@
 <form method="post" action="{{ path('concours_delete', {'id': concours.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer ce concours ?');" style="display:inline-block">
     <input type="hidden" name="_method" value="DELETE">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ concours.id) }}">
-    <button class="btn btn-danger btn-sm py-0" style="font-size: 0.8em;">Supprimer</button></a>
+    <button class="btn btn-danger btn-sm py-0" style="font-size: 0.8em;"><i class="fas fa-trash-alt"></i></button></a>
 </form>

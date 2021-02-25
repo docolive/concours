@@ -40,9 +40,15 @@ class Categorie
      */
     private $echantillons;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Profil::class, mappedBy="choix_degustation")
+     */
+    private $jures;
+
     public function __construct()
     {
         $this->echantillons = new ArrayCollection();
+        $this->jures = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -111,6 +117,33 @@ class Categorie
             if ($echantillon->getCategorie() === $this) {
                 $echantillon->setCategorie(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Profil[]
+     */
+    public function getJures(): Collection
+    {
+        return $this->jures;
+    }
+
+    public function addJure(Profil $jure): self
+    {
+        if (!$this->jures->contains($jure)) {
+            $this->jures[] = $jure;
+            $jure->addChoixDegustation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJure(Profil $jure): self
+    {
+        if ($this->jures->removeElement($jure)) {
+            $jure->removeChoixDegustation($this);
         }
 
         return $this;

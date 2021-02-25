@@ -36,22 +36,52 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+    * @return User[] Returns an array of User objects
+    */
+    public function findJures($concoursId)
     {
         return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
+            ->innerJoin('u.profil','p','WITH','p.jure = true')
+            ->leftJoin('u.echantillons','e')
+            ->leftJoin('e.categorie','c')
+            ->orderBy('p.nom', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
+
+    /**
+    * @return User[] Returns an array of User objects
     */
+    public function findCandidats($concours)
+    {
+        return $this->createQueryBuilder('u')
+            ->innerJoin('u.profil','p')
+            ->innerJoin('u.echantillons','e')
+            ->innerJoin('e.categorie','c')
+            ->innerJoin('c.type','t','WITH','t.concours = :concours')
+            ->orderBy('p.nom', 'ASC')
+            ->setParameter('concours', $concours)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+/**
+    * @return User[] Returns an array of User objects
+    */
+    public function findByRoleAdmin()
+    {
+        return $this->createQueryBuilder('u')
+            ->Where('u.roles = :role')
+            ->orWhere('u.roles = :roleSup')
+            ->setParameter('role', '["ROLE_ADMIN"]')
+            ->setParameter('roleSup', '["ROLE_SUPER_ADMIN"]')
+            ->getQuery()
+            ->getResult();
+    }
+    
 
     /*
     public function findOneBySomeField($value): ?User

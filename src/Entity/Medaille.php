@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MedailleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,6 +24,16 @@ class Medaille
      */
     private $nom;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Echantillon::class, mappedBy="medaille")
+     */
+    private $echantillons;
+
+    public function __construct()
+    {
+        $this->echantillons = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -35,6 +47,36 @@ class Medaille
     public function setNom(string $nom): self
     {
         $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Echantillon[]
+     */
+    public function getEchantillons(): Collection
+    {
+        return $this->echantillons;
+    }
+
+    public function addEchantillon(Echantillon $echantillon): self
+    {
+        if (!$this->echantillons->contains($echantillon)) {
+            $this->echantillons[] = $echantillon;
+            $echantillon->setMedaille($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEchantillon(Echantillon $echantillon): self
+    {
+        if ($this->echantillons->removeElement($echantillon)) {
+            // set the owning side to null (unless already changed)
+            if ($echantillon->getMedaille() === $this) {
+                $echantillon->setMedaille(null);
+            }
+        }
 
         return $this;
     }

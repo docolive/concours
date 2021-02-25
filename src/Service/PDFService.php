@@ -103,17 +103,21 @@ class PDFService
         $pdf->SetFont('dejavusans', 'B', 10, '', true);
         $pdf->Cell(270,10,'Échantillons présentés au Concours',1,1,'C');
         $pdf->Cell(100,7,'Catégorie',1,0,'C');
+        $pdf->Cell(30,7,'Variété',1,0,'C');
         $pdf->Cell(30,7,'Numéro de lot',1,0,'C');
         $pdf->Cell(30,7,'Volume',1,0,'C');
-        $pdf->Cell(110,7,'Description',1,1,'C');
+        $pdf->Cell(80,7,'Description',1,1,'C');
 
 
         $pdf->SetFont('dejavusans', '', 10, '', true);
         foreach($echantillons as $e){
+            $mode = $e->getPaiement()->getName();
+            $depot = $e->getLivraison()->getName();
             $pdf->MultiCell(100,10,$e->getCategorie()->getName(),1,'C',0,0,'','',true,0,false,true,0,'M',true);
+            $pdf->Cell(30,10,$e->getVariety(),1,0,'C');
             $pdf->Cell(30,10,$e->getLot(),1,0,'C');
             $pdf->Cell(30,10,$e->getVolume().' '.$e->getCategorie()->getType()->getUnite(),1,0,'C');
-            $pdf->MultiCell(110,10,$e->getDescription(),1,'C',0,1,'','',true,0,false,true,0,'M',true);
+            $pdf->MultiCell(80,10,$e->getDescription(),1,'C',0,1,'','',true,0,false,true,0,'M',true);
         }
 
         $HT = $concours->getCout() * count($echantillons);
@@ -123,6 +127,9 @@ class PDFService
         $pdf->Write(5,"",'',false,'C',1);
         $pdf->SetFont('dejavusans', '', 10, '', true);
         $pdf->Cell(270,7,'Frais de participation : '.count($echantillons).' échantillons X '.$concours->getCout().' = '.$HT.'€ HT + '.$TVA.'€ de TVA à '.$concours->getTVA().'% = '.$TTC.' € TTC',1,1,'C');
+
+        $pdf->Cell(270,7,'Je règle '.$TTC.' € par '.$mode,1,1,'C');
+        $pdf->Cell(270,7,'Je déposerai mes échantillons à '.$depot,1,1,'C');
 
 
 

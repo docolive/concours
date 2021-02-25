@@ -65,6 +65,8 @@ class EchantillonEditType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Echantillon::class,
+            'validation_groups' => ['edit']
+
             
         ]);
     }

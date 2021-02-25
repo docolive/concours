@@ -1,20 +1,24 @@
 <table class="table table-striped table-bordered" style="margin:10px; font-size:0.9em">
 <tr>
 <th>Catégorie</th>
+<th>Varieté</th>
 <th>Description</th>
 <th>Lot</th>
 <th>Volume</th>
+<th>Code public</th>
 <th>Actions</th>
 </tr>
 {% for echantillon in echantillons %}
     <tr>
     <td style="text-align:left">{{echantillon.categorie.name}} {{echantillon.variety}}</td>
+    <td>{{echantillon.variety}}</td>
     <td>{{echantillon.description}}</td>
     <td>{{echantillon.lot}}</td>
     <td>{{echantillon.volume|number_format(0, ',', ' ')}} {{echantillon.categorie.type.unite}}</td>
+    <td>{{echantillon.publicRef}}</td>
     <td>
-    <a href="{{ path('echantillon_edit', {'id': echantillon.id}) }}">
-    <button class="btn btn-primary btn-sm py-0" style="font-size: 0.8em;">Modifier</button></a>
+    <a href="{{ path('echantillon_edit', {'id': echantillon.id}) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Modifier">
+    <button class="btn btn-primary btn-sm py-0" style="font-size: 0.8em;" ><i class="fas fa-edit"></i></button></a>
     {% include "echantillon/_delete_form.html.twig" %}
     </td>
     </tr>

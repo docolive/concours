@@ -40,7 +40,6 @@ class EchantillonRepository extends ServiceEntityRepository
     /**
     * @return Echantillon[] Returns an array of Echantillon objects
     */
-    
     public function findEchMemeType($user,$type)
     {
         return $this->createQueryBuilder('e')
@@ -48,6 +47,26 @@ class EchantillonRepository extends ServiceEntityRepository
             ->innerJoin('c.type','t','WITH','c.type = :type')
             ->where('e.user = :user')
             ->setParameter('type', $type)
+            ->setParameter('user', $user)
+            ->orderBy('e.categorie', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+    * @return Echantillon[] Returns an array of Echantillon objects
+    */
+    public function findEchMemeTypeOT($user,$variety,$categorie)
+    {
+        return $this->createQueryBuilder('e')
+            ->innerJoin('e.categorie','c')
+            ->innerJoin('c.type','t','WITH','t.otable = true')
+            ->where('e.user = :user')
+            ->andWhere('e.categorie = :categorie')
+            ->andWhere('e.variety = :variety')
+            ->setParameter('categorie', $categorie)
+            ->setParameter('variety', $variety)
             ->setParameter('user', $user)
             ->orderBy('e.categorie', 'ASC')
             ->getQuery()

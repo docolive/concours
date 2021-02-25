@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Service\ConcoursSession;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,10 +16,13 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  * @Route("/admin/user")
  */
 class UserController extends AbstractController{
+    private $session;
     private $encoder;
-    public function __construct(UserPasswordEncoderInterface $encoder){
+    public function __construct(UserPasswordEncoderInterface $encoder,ConcoursSession $concoursSession){
         $this->encoder = $encoder;
+        $this->session = $concoursSession;
     }
+
 /**
  * @Route("/add",name="user_add"))
  * @IsGranted("ROLE_ADMIN")
@@ -67,19 +71,78 @@ public function edit( Request $request, User $user): Response
         'form' => $form->createView()
     ]);
 }
- /**
+
+    /**
      * @Route("/", name="user_index", methods={"GET"})
      */
     public function index(UserRepository $userRepository): Response
     {
         return $this->render('user/index.html.twig', [
+            'titre' => "Liste de tous les utilisateurs",
             'users' => $userRepository
             ->findBy(
                 array(),
                 array('email' => 'ASC')
             ),
         ]);
-    }
+        
+    }   
+
+    /**
+    * @Route("/jures", name="jure_index")
+    */
+    public function jureIndex(UserRepository $userRepository): Response
+    {
+        $concours = $this->session->recup();
+        if($concours == 'vide'){
+            return $this->redirectToRoute('concours_choix');
+        }
+        $datas = $userRepository->findJures(
+            array('concoursId'=>$concours->getId())
+        );
+        $tab = array();
+        $i = 0;
+        foreach($datas as $d){
+            $tab[$i]['id'] = $d->getId();
+            $tab[$i]['nom'] = $d->getProfil()->getNom().' '.$d->getProfil()->getPrenom();
+            $tab[$i]['email'] = $d->getEmail();
+            $echs = $d->getEchantillons();
+            $tab[$i]['categorie'] = array();
+            foreach($echs as $e){
+                if(!in_array($e->getCategorie()->getName(),$tab[$i]['categorie'])){
+                    $tab[$i]['categorie'][] = $e->getCategorie()->getName();
+                }
+            }
+            $tab[$i]['degust'] = array();
+            foreach($d->getProfil()->getChoixDegustation() as $c){
+                $tab[$i]['degust'][] = $c->getName();
+            }
+            $i++;
+        }
+        return $this->render('user/jures.html.twig', [
+            'tab' => $tab,
+        ]);
+    }   
+
+    /**
+    * @Route("/candidats", name="candidat_index")
+    */
+    public function candidatsIndex(UserRepository $userRepository): Response
+    {
+        $concours = $this->session->recup();
+        if($concours == 'vide'){
+            return $this->redirectToRoute('concours_choix');
+        }
+        $users = $userRepository->findCandidats($concours);
+        //dd($users);
+        return $this->render('user/index.html.twig', [
+            'titre' => "Liste des candidats",
+            'droits' => false,
+            'email' => false,
+            'utilisateur' => 'candidat',
+            'users' => $users
+        ]);
+    }   
 
     /**
      * @Route("/{id}", name="user_delete", methods={"DELETE"})

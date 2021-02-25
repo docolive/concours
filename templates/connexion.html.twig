@@ -24,6 +24,8 @@
     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 {% endif %}
 
+
+
 {% if app.user %}
     <div style="background:AliceBlue; border-radius:5px; padding:5px;" class="mb-3">
         Vous êtes actuellement connecté(e) avec l'adresse email "<em>{{ app.user.username }}</em>"
@@ -32,6 +34,10 @@
 {% else %}
     
     <img class="mb-4" src="images/logo_cto-154x100.png" alt="" width="80" >
+    <div class="mb-4">
+    <a href="{{path('app_register')}}"><button class="btn btn-success">Créer mon compte</button></a>
+    </div>
+    
     <div style="background:AliceBlue; border-radius:5px; padding:5px;" class="mb-3">
     <h5 class="h5 mb-3 fw-normal">Connexion <br>au <br>Concours de la Foire de Brignoles</h5>
     </div>
