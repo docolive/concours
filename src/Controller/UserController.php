@@ -30,11 +30,15 @@ class UserController extends AbstractController{
  */
 public function add(Request $request){
     $user = new User();
+    $user->setIsVerified(true);
     $form = $this->createForm(UserType::class,$user);
 
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
+        //dd($form['Roles']->getData());
+        $user->setRoles( array($form['Roles']->getData()) );
+        
         $user->setPassword($this->encoder->encodePassword($user,$user->getPassWord()));
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($user);
@@ -78,6 +82,8 @@ public function edit( Request $request, User $user): Response
     public function index(UserRepository $userRepository): Response
     {
         return $this->render('user/index.html.twig', [
+            'email'=>true,
+            'droits'=>true,
             'titre' => "Liste de tous les utilisateurs",
             'users' => $userRepository
             ->findBy(

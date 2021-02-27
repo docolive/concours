@@ -14,27 +14,20 @@ class UserType extends AbstractType
     {
         $builder
             ->add('email')
-            ->add('roles', ChoiceType::class, array(
-				'label_attr'=>array('class'=>'sr-only'),
-				'attr'  =>  array('class' => 'form-control',
-						'style' => 'margin:5px 0;'),
-				'choices' =>
-				array
-				(
-						//'ROLE_SUPER_ADMIN' => 'ROLE_SUPER_ADMIN',
-						'Administrateur du concours' => 'ROLE_ADMIN',
-						'Candidat' => 'ROLE_CANDIDAT',
-						
-                        
-				) ,
-				'multiple' => true,
-				'required' => true,
-		)
-				)
+            ->add('Roles', ChoiceType::class, [
+                'mapped'=>false,
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'choices'  => [
+                  'Candidat ou Juré' => 'ROLE_CANDIDAT',
+                  'Administrateur' => 'ROLE_ADMIN',
+                ],
+            ])
             ->add('password')
             ->add('isVerified')
             ;
-            
+       
     }
 
     public function configureOptions(OptionsResolver $resolver)

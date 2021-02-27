@@ -150,8 +150,13 @@ class ValidationController extends AbstractController
         }
         $form = $this->createFormBuilder()
             ->add('depot', ChoiceType::class, array(
+                'attr' => [
+                    //'class' => 'mt-4'
+                ],
+
                 'label'=>false,
-                
+                'label_attr' => [
+                ],
                 'multiple' => false,
                 'required' => true,
                 'expanded' => true,

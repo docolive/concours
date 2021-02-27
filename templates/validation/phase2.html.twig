@@ -28,8 +28,11 @@
 {{form_start(form)}}
 <div class="row">
         <div class="col">
+        
         <h4 style="text-align:center">Choix du lieu de dépôt des échantillons</h4>
-            {{ form_row(form.depot) }}
+            {{ form_widget(form.depot.0) }}{{ form_label(form.depot.0) }}<hr>
+            {{ form_widget(form.depot.1) }}{{ form_label(form.depot.1) }}
+            <hr>
         </div>
         <div class="col">
         <h4 style="text-align:center">Choix du mode de paiement</h4>

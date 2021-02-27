@@ -14,7 +14,7 @@
 <div class="row mt-4 d-flex justify-content-center">
 
 <div class="col text-center">
-<a href="{{ path('user_add') }}"><button class="btn btn-success">Ajouter un {{utilisateur}}</button></a>
+<a href="{{ path('user_add') }}"><button class="btn btn-success">Ajouter un utilisateur</button></a>
 </div>
 </div>
 
@@ -40,8 +40,13 @@
         <tbody>
         {% for user in users %}
         {% set superAdmin = false %}
+        
             <tr class="align-middle">
-                <td style="text-align:left">{{ user.profil.nom }} {{ user.profil.prenom }}</td>
+            {% if user.profil.nom is defined %}
+                <td style="text-align:left">{{ user.profil.nom }} {{ user.profil.prenom }}</td>d
+                {% else %}
+                    <td></td>
+            {% endif %}
                 {% if email %}
                     <td>{{ user.email }}</td>
                     {% if user.verified %}
@@ -78,7 +83,7 @@
                 {% endif %}
                 </td>
                 <td>
-                {% if user.profil.jure %}
+                {% if user.profil.jure is defined and user.profil.jure == 1%}
                 <ul>
                 {% for d in user.profil.choixdegustation %}
                     <li>
