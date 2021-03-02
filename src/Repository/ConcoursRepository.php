@@ -19,6 +19,32 @@ class ConcoursRepository extends ServiceEntityRepository
         parent::__construct($registry, Concours::class);
     }
 
+    /**
+      * @return Concours[] Returns an array of Concours objects
+    */
+    public function findConcoursOuverts($user){
+        $roles = $user->getRoles();
+
+        if(in_array("ROLE_ADMIN",$roles) || in_array("ROLE_SUPER-ADMIN",$roles)){
+            return $this->createQueryBuilder('c')
+            ->orderBy('c.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+        }else{
+            if(in_array("ROLE_CANDIDAT",$roles)){
+            return $this->createQueryBuilder('c')
+            ->where('c.debut_inscription <= :now')
+            ->andWhere('c.fin_inscription >= :now')
+            ->orderBy('c.id', 'ASC')
+            ->setParameter('now',date('Y-m-d'))
+            ->getQuery()
+            ->getResult()
+        ;
+            }
+        }
+    }
+
     // /**
     //  * @return Concours[] Returns an array of Concours objects
     //  */

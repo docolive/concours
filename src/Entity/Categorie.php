@@ -45,10 +45,16 @@ class Categorie
      */
     private $jures;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Procede::class, mappedBy="categorie")
+     */
+    private $procedes;
+
     public function __construct()
     {
         $this->echantillons = new ArrayCollection();
         $this->jures = new ArrayCollection();
+        $this->procedes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -144,6 +150,36 @@ class Categorie
     {
         if ($this->jures->removeElement($jure)) {
             $jure->removeChoixDegustation($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Procede[]
+     */
+    public function getProcedes(): Collection
+    {
+        return $this->procedes;
+    }
+
+    public function addProcede(Procede $procede): self
+    {
+        if (!$this->procedes->contains($procede)) {
+            $this->procedes[] = $procede;
+            $procede->setCategorie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProcede(Procede $procede): self
+    {
+        if ($this->procedes->removeElement($procede)) {
+            // set the owning side to null (unless already changed)
+            if ($procede->getCategorie() === $this) {
+                $procede->setCategorie(null);
+            }
         }
 
         return $this;

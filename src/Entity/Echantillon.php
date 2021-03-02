@@ -16,6 +16,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @MyAssert\CheckVariety(groups={"add","edit"})
  * @MyAssert\CheckVolume(groups={"add","edit"})
  * @MyAssert\CheckNbreEch(groups={"add"})
+ * @MyAssert\CheckUniqueLot(groups={"add","edit"})
+ * @MyAssert\CheckProcede(groups={"add","edit"})
  */
 class Echantillon
 {
@@ -99,6 +101,13 @@ class Echantillon
      * @ORM\ManyToOne(targetEntity=Livraison::class, inversedBy="echantillons")
      */
     private $livraison;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Procede::class, inversedBy="echantillons")
+     * @ORM\JoinColumn(nullable=false)
+     * 
+     */
+    private $procede;
 
     public function getId(): ?int
     {
@@ -269,6 +278,18 @@ class Echantillon
     public function setLivraison(?Livraison $livraison): self
     {
         $this->livraison = $livraison;
+
+        return $this;
+    }
+
+    public function getProcede(): ?Procede
+    {
+        return $this->procede;
+    }
+
+    public function setProcede(?Procede $procede): self
+    {
+        $this->procede = $procede;
 
         return $this;
     }

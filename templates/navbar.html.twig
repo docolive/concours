@@ -8,12 +8,16 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Paramètres réglementaires
+                    Paramètres
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="{{path('concours_index')}}">Concours</a></li>
                     <li><a class="dropdown-item" href="{{path('type_index')}}">Types de produits</a></li>
                     <li><a class="dropdown-item" href="{{path('categorie_index')}}">Catégories</a></li>
+                    <li><a class="dropdown-item" href="{{path('procede_index')}}">Procédés</a></li>
+                    <li><a class="dropdown-item" href="{{path('paiement_index')}}">Modes de paiement</a></li>
+                    <li><a class="dropdown-item" href="{{path('livraison_index')}}">Dépôts</a></li>
+                    <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{{path('concours_reglt')}}" target="_blank">Réglement du Concours</a></li>
                    
                 </ul>
@@ -40,27 +44,8 @@
                 </ul>
                 </li>
 
-                <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Dépôts
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="{{path('livraison_index')}}">Liste</a></li>
-                    <li><a class="dropdown-item" href="{{path('livraison_add')}}">Ajouter</a></li>
-                   
-                </ul>
-                </li>
+                
 
-                <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Modes de paiement
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="{{path('paiement_index')}}">Liste</a></li>
-                    <li><a class="dropdown-item" href="{{path('paiement_add')}}">Ajouter</a></li>
-                   
-                </ul>
-                </li>
                 <li class="nav-item">
                 <a class="nav-link" href="{{path('app_logout')}}" tabindex="-1" aria-disabled="true">Déconnexion</a>
                 </li>

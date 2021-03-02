@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Form\EchantillonEditType;
+use App\Repository\ProcedeRepository;
 
 /**
  * @Route("/echantillon")
@@ -61,7 +62,7 @@ class EchantillonController extends AbstractController
     /**
      * @Route("/add", name="echantillon_add", methods={"GET","POST"})
      */
-    public function add(Request $request): Response
+    public function add(Request $request,ProcedeRepository $procedeRepository): Response
     {
         $concours = $this->session->recup();
         if($concours == 'vide'){
@@ -89,7 +90,8 @@ class EchantillonController extends AbstractController
         $form = $this->createForm(EchantillonType::class, $echantillon);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() ) {
+            
            //code public
             $categorie = $echantillon->getCategorie()->getId();
             $codePublic = $this->codePublic($categorie);
@@ -105,10 +107,10 @@ class EchantillonController extends AbstractController
         }
 
         return $this->render('echantillon/add.html.twig', [
-            'categorie' => $echantillon,
+            //'echantillon' => $echantillon,
             'concours' => $concours,
             'form' => $form->createView(),
-            'add' => true
+            //'add' => true
         ]);
     }
 

@@ -10,7 +10,7 @@
 
 <div class="d-flex flex-wrap mb-5" style="width:100%">
     <!-- Sidebar -->
-    <div style="width:25%; background: #7386D5;color: #fff;">
+    <div style="width:20%; background: #7386D5;color: #fff; font-size:0.9em">
         <div class=" mb-4 mt-5">
             <h4>Vos coordonnées</h4>
         </div>
@@ -70,7 +70,7 @@
     </div>
 
     <!-- Page Content -->
-    <div class="mt-4" style="width:75%">
+    <div class="mt-4" style="width:80%">
         <div class="d-flex justify-content-around flex-wrap" style="width:100%">
             {% if profil|length == 0 %}
                 <a href="{{path('profil_add')}}"><button class="btn btn-info" >M'inscrire comme juré(e)</button></a>

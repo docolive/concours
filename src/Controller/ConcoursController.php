@@ -60,12 +60,9 @@ class ConcoursController extends AbstractController
      */
     public function choix(ConcoursRepository $concoursRepository): Response
     {
+        $user = $this->getUser();
         return $this->render('concours/choix.html.twig', [
-            'concourses' => $concoursRepository
-            ->findBy(
-                array(),
-                array('id' => 'DESC')
-            )
+            'concourses' => $concoursRepository->findConcoursOuverts($user)
         ]);
     }
 

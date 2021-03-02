@@ -1,6 +1,7 @@
-<table class="table table-striped table-bordered" style="margin:10px; font-size:0.9em">
+<table class="table table-striped table-bordered" style="margin:10px; font-size:0.8em">
 <tr>
 <th>Catégorie</th>
+<th>Procédé</th>
 <th>Varieté</th>
 <th>Description</th>
 <th>Lot</th>
@@ -11,6 +12,11 @@
 {% for echantillon in echantillons %}
     <tr>
     <td style="text-align:left">{{echantillon.categorie.name}} {{echantillon.variety}}</td>
+    <td style="text-align:left">
+    {% if echantillon.procede is not null %}
+        {{echantillon.procede.name}}
+    {% endif %}
+    </td>
     <td>{{echantillon.variety}}</td>
     <td>{{echantillon.description}}</td>
     <td>{{echantillon.lot}}</td>

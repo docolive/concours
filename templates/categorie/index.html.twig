@@ -8,14 +8,21 @@
 <tr>
 <th>Concours</th>
 <th>Type</th>
-<th>ORDRE</th>
-<th>NOM</th>
+<th>Procédés</th>
+<th>Ordre</th>
+<th>Nom</th>
 <th>Actions</th>
 </tr>
 {% for categorie in categories %}
     <tr>
     <td>{{categorie.type.concours.name}}</td>
     <td>{{categorie.type.nom}}</td>
+    <td>
+    {% for p in categorie.procedes %}
+        
+    {{p.name}}<br>
+    {% endfor %}
+    </td>
     <td>{{categorie.ordre}}</td>
     <td>{{categorie.name}}</td>
     <td>

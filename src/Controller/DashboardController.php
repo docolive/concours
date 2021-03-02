@@ -21,6 +21,20 @@ class DashboardController extends AbstractController
     }
 
     /**
+     * @Route("/ajax/checkProcede", name="checkProcede", methods={"POST"})
+     */
+    public function checkProcedeAjax(Request $request, CategorieRepository $categorieRepository): Response
+    {
+        $categorieId = $request->request->get('categorieId');
+        $categorie = $categorieRepository->find($categorieId);
+        $response = array();
+        foreach($categorie->getProcedes() as $p){
+            $response[$p->getId()] = $p->getName();
+        }
+        return new JsonResponse($response);
+    }
+
+    /**
      * @Route("/ajax/checkOT", name="checkOT", methods={"POST"})
      */
     public function checkOTAjax(Request $request, CategorieRepository $categorieRepository): Response

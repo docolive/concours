@@ -13,14 +13,14 @@ test = false;
 $(function() {
     
     $("#echantillon_variety").hide();
+   
     var categorieId = $("#echantillon_categorie" ).val();
-        categorieTypeIsOT(categorieId);
+    categorieTypeIsOT(categorieId);
 
     $("#echantillon_categorie").change(function(){
         var categorieId = $("#echantillon_categorie" ).val();
         categorieTypeIsOT(categorieId);
     });
-    
     
     /**
     * faire apparaître l'input variety lorsque le type est oliveOt
@@ -40,6 +40,29 @@ $(function() {
         });
     }
     
+    var $categorie = $('#echantillon_categorie');
+    // When categorie gets selected ...
+    $categorie.change(function() {
+        // ... retrieve the corresponding form.
+        var $form = $(this).closest('form');
+        // Simulate form data, but only include the selected categorie value.
+        var data = {};
+        data[$categorie.attr('name')] = $categorie.val();
+        // Submit data via AJAX to the form's action path.
+        $.ajax({
+            url : $form.attr('action'),
+            type: $form.attr('method'),
+            data : data,
+            success: function(html) {
+            // Replace current procede field ...
+            $('#echantillon_procede').replaceWith(
+                // ... with the returned one from the AJAX response.
+                $(html).find('#echantillon_procede')
+            );
+            // Position field now displays the appropriate procedes.
+            }
+        });
+    });
 
 });
        
