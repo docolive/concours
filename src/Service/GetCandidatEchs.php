@@ -25,5 +25,11 @@ class GetCandidatEchs
         return $this->echantillonRepository->findAllEchUser($this->user,$this->concours);
 
     }
+
+    public function getAdminEchs($user){
+        
+        return $this->echantillonRepository->findAllEchUser($user,$this->concours);
+
+    }
     
 }
