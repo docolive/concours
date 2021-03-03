@@ -11,7 +11,7 @@
 </tr>
 {% for echantillon in echantillons %}
     <tr>
-    <td style="text-align:left">{{echantillon.categorie.name}} {{echantillon.variety}}</td>
+    <td style="text-align:left">{{echantillon.categorie.name}}</td>
     <td style="text-align:left">
     {% if echantillon.procede is not null %}
         {{echantillon.procede.name}}
