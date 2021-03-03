@@ -13,8 +13,8 @@
 </tr>
 {% for procede in procedes %}
     <tr>
-    <td>{{procede.name}}</td>
-    <td>{{procede.categorie.name}}</td>
+    <td style="text-align:left">{{procede.name}}</td>
+    <td style="text-align:left">{{procede.categorie.name}}</td>
     <td>
     <a href="{{ path('procede_edit', {'id': procede.id}) }}">
     <button class="btn btn-primary btn-sm py-0" style="font-size: 0.8em;"><i class="fas fa-edit"></i></button></a>

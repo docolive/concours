@@ -16,7 +16,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @MyAssert\CheckVariety(groups={"add","edit"})
  * @MyAssert\CheckVolume(groups={"add","edit"})
  * @MyAssert\CheckNbreEch(groups={"add"})
- * @MyAssert\CheckUniqueLot(groups={"add","edit"})
+ * @MyAssert\CheckUniqueLot(groups={"add"})
+ * @MyAssert\CheckUniqueLotEdit(groups={"edit"})
  * @MyAssert\CheckProcede(groups={"add","edit"})
  */
 class Echantillon
