@@ -68,8 +68,8 @@ class ValidationController extends AbstractController
             ->addCc($cc[1])
             //->addCc($cc[2])
             //->addCc($cc[3])
-            //->bcc('bcc@example.com')
-            //->replyTo('fabien@example.com')
+            ->bcc('jean-michel.duriez@franceolive.fr')
+            ->replyTo('contact@franceolive.com')
             //->priority(Email::PRIORITY_HIGH)
             ->subject('Bulletin de participation au concours ')
             //->text('Sending emails is fun again!')
@@ -197,6 +197,8 @@ class ValidationController extends AbstractController
             }
 
         $this->pdf->bulletin($concours,$user,$echantillons);
+            //return $this->redirectToRoute('dashboard');
+            
             return $this->redirectToRoute('bulletin_mail');
         }
 

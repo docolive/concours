@@ -66,7 +66,10 @@ class PDFService
 
         //Cell($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=0, $link='', $stretch=0, $ignore_min_height=false, $calign='T', $valign='M')
 
-        $pdf->Write(5,"Bulletin de participation au Concours ".$concours->getName(),'',false,'C',1);
+        $pdf->MultiCell(190,10,"Bulletin de participation au Concours ".$concours->getName(),$border=1,$align='C',$fill=0,$ln=0,$x='40',$y='',$reseth=true,$stretch=0,$ishtml=false,$autopadding=true,$maxh=0,$valign='M',$fitcell=false);
+
+        $pdf->Write(5,"",'',false,'C',1);
+        $pdf->Write(5,"",'',false,'C',1);
         $pdf->Write(5,"",'',false,'C',1);
         $pdf->Write(5,"",'',false,'C',1);
         $pdf->Write(5,"Candidat ",'',false,'L',1);
@@ -97,27 +100,37 @@ class PDFService
             $pdf->Write(5,'Tél : '.$user->getProfil()->getPhone(),'',false,'L',1);
         }
 
+        // MultiCell($w, $h, $txt, $border=0, $align='J', $fill=0, $ln=1, $x='', $y='', $reseth=true, $stretch=0, $ishtml=false, $autopadding=true, $maxh=0)
+
         // échantillons
         $pdf->Write(5,"",'',false,'C',1);
 
-        $pdf->SetFont('dejavusans', 'B', 10, '', true);
+        $pdf->SetFont('dejavusans', 'B', 8, '', true);
         $pdf->Cell(270,10,'Échantillons présentés au Concours',1,1,'C');
-        $pdf->Cell(100,7,'Catégorie',1,0,'C');
+        $pdf->Cell(70,7,'Catégorie',1,0,'C');
+        $pdf->Cell(40,7,'Procédé',1,0,'C');
         $pdf->Cell(30,7,'Variété',1,0,'C');
         $pdf->Cell(30,7,'Numéro de lot',1,0,'C');
-        $pdf->Cell(30,7,'Volume',1,0,'C');
-        $pdf->Cell(80,7,'Description',1,1,'C');
+        $pdf->Cell(20,7,'Volume',1,0,'C');
+        $pdf->Cell(60,7,'Description',1,0,'C');
+         $pdf->Cell(20,7,'Référence',1,1,'C');
 
 
-        $pdf->SetFont('dejavusans', '', 10, '', true);
+        $pdf->SetFont('dejavusans', '', 8, '', true);
         foreach($echantillons as $e){
             $mode = $e->getPaiement()->getName();
             $depot = $e->getLivraison()->getName();
-            $pdf->MultiCell(100,10,$e->getCategorie()->getName(),1,'C',0,0,'','',true,0,false,true,0,'M',true);
+            $pdf->MultiCell(70,10,$e->getCategorie()->getName(),$border=1,$align='L',$fill=0,$ln=0,$x='',$y='',$reseth=true,$stretch=0,$ishtml=false,$autopadding=true,$maxh=10,$valign='M',$fitcell=false);
+            $procede = '';
+            if($e->getProcede() != null){
+                $procede = $e->getProcede()->getName();
+            }
+            $pdf->MultiCell(40,10,$procede,$border=1,$align='L',$fill=0,$ln=0,$x='',$y='',$reseth=true,$stretch=0,$ishtml=false,$autopadding=true,$maxh=10,$valign='M',$fitcell=false);
             $pdf->Cell(30,10,$e->getVariety(),1,0,'C');
             $pdf->Cell(30,10,$e->getLot(),1,0,'C');
-            $pdf->Cell(30,10,$e->getVolume().' '.$e->getCategorie()->getType()->getUnite(),1,0,'C');
-            $pdf->MultiCell(80,10,$e->getDescription(),1,'C',0,1,'','',true,0,false,true,0,'M',true);
+            $pdf->Cell(20,10,$e->getVolume().' '.$e->getCategorie()->getType()->getUnite(),1,0,'C');
+            $pdf->MultiCell(60,10,$e->getDescription(),$border=1,$align='L',$fill=0,$ln=0,$x='',$y='',$reseth=true,$stretch=0,$ishtml=false,$autopadding=true,$maxh=0,$valign='M',$fitcell=false);
+            $pdf->Cell(20,10,$e->getPublicRef(),1,1,'C');
         }
 
         $HT = $concours->getCout() * count($echantillons);
