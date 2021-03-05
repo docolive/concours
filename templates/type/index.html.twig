@@ -16,10 +16,10 @@
 </tr>
 {% for type in types %}
     <tr>
-    <td>{{type.concours.name}}</td>
+    <td style="text-align:left">{{type.concours.name}}</td>
     <td>{{type.ordre}}</td>
-    <td>{{type.nom}}</td>
-    <td>{{type.volMinLot}} {{type.unite}}</td>
+    <td style="text-align:left">{{type.nom}}</td>
+    <td style="text-align:left">{{type.volMinLot}} {{type.unite}}</td>
     <td>{{type.nbreMaxEch}}</td>
     <td>
     <a href="{{ path('type_edit', {'id': type.id}) }}">

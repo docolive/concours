@@ -56,7 +56,7 @@ class ValidationController extends AbstractController
         }else{
             $message .= "<br><br>Vous avez la possibilité d'être éventuellement juré(e) dans ce Concours.<br>Il suffit de <a href=\"https://concours.ctolivier.org\">vous connecter</a> et de cliquer sur \"m'inscrire comme juré(e)\" .";
         }
-        $message .= "<br><br>Vous pouvez contacter les organisateurs au 04 42 23 01 92 ou bien par mail : c.avallone@ctolivier.org pour les huiles d'olives et d.husson@ctolivier.org pour les olives de table et la tapenade.";
+        $message .= "<br><br>Vous pouvez contacter les organisateurs au 04 42 23 01 92 ou bien par mail : c.avallone@ctolivier.org .";
         $message .= "<br><br>Vous trouverez ci-joint votre bulletin d'inscription.";
         $message .= "<br><br><br>Cordialement,";
         $message .= "<br><br><br>Les organisateurs du Concours";

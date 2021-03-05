@@ -15,14 +15,14 @@
 </tr>
 {% for l in livraisons %}
     <tr>
-    <td>{{l.name}}</td>
-    <td>
+    <td style="text-align:left">{{l.name}}</td>
+    <td style="text-align:left">
     {{l.adress1}}<br>
     {{l.adress2}}<br>
     {{l.adress3}}<br>
     </td>
-    <td>{{l.phone}}</td>
-    <td>{{l.horaire}}</td>
+    <td style="text-align:left">{{l.phone}}</td>
+    <td style="text-align:left">{{l.horaire}}</td>
     <td>
     <a href="{{ path('livraison_edit', {'id': l.id}) }}">
     <button class="btn btn-primary btn-sm py-0" style="font-size: 0.8em;"><i class="fas fa-edit"></i></button></a>

@@ -15,16 +15,16 @@
 </tr>
 {% for categorie in categories %}
     <tr>
-    <td>{{categorie.type.concours.name}}</td>
-    <td>{{categorie.type.nom}}</td>
-    <td>
+    <td style="text-align:left">{{categorie.type.concours.name}}</td>
+    <td style="text-align:left">{{categorie.type.nom}}</td>
+    <td style="text-align:left">
     {% for p in categorie.procedes %}
         
     {{p.name}}<br>
     {% endfor %}
     </td>
     <td>{{categorie.ordre}}</td>
-    <td>{{categorie.name}}</td>
+    <td style="text-align:left">{{categorie.name}}</td>
     <td>
     <a href="{{ path('categorie_edit', {'id': categorie.id}) }}">
     <button class="btn btn-primary btn-sm py-0" style="font-size: 0.8em;"><i class="fas fa-edit"></i></button></a>
