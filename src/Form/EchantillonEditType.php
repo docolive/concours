@@ -17,6 +17,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class EchantillonEditType extends AbstractType
 {
@@ -65,6 +66,16 @@ class EchantillonEditType extends AbstractType
                     'placeholder' => 'Nom de la variété des olives de table',
                 ],
                 'label' => false
+            ])
+            ->add('recu', CheckboxType::class,[
+                'required' => false,
+                'label' => 'Reçu'
+            ])
+            ->add('paye', CheckboxType::class,[
+                'attr'=>[
+                    'disabled' => true,   
+                ],
+                'label' => 'Réglé'
             ])
             
         ;

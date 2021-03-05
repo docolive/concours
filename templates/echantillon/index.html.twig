@@ -55,7 +55,7 @@
     <td>{{echantillon.recu}}</td>
     <td>
     {% if echantillon.paiement is not null %}
-        {{echantillon.paiement.name}}
+        {{echantillon.paiement.name | slice(0,6)}}...
     {% endif %}
     </td>
     <td>{{echantillon.paye}}</td>

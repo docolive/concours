@@ -70,6 +70,7 @@ class EchantillonType extends AbstractType
                 ],
                 'label' => false
             ])
+       
             
         ;
 

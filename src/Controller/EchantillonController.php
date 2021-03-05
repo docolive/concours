@@ -79,14 +79,18 @@ class EchantillonController extends AbstractController
                     'error',
                     'Votre numéro de SIRET est obligatoire pour participer au Concours.'
                 );
-                return $this->redirectToRoute('profil_edit');
+                return $this->redirectToRoute('profil_admin_edit',[
+                    'user'=>$user
+                ]);
             }
         }else{
             $this->addFlash(
                 'error',
                 'Votre numéro de SIRET est obligatoire pour participer au Concours.'
             );
-            return $this->redirectToRoute('profil_add');
+            return $this->redirectToRoute('profil_admin_add',[
+                'userId'=>$userId
+            ]);
         }
         $echantillon = new Echantillon();
         $echantillon->setUser($user);
@@ -111,6 +115,7 @@ class EchantillonController extends AbstractController
 
         return $this->render('echantillon/add.html.twig', [
             //'echantillon' => $echantillon,
+            'admin' => 1,
             'concours' => $concours,
             'form' => $form->createView(),
             //'add' => true
@@ -185,9 +190,16 @@ class EchantillonController extends AbstractController
     public function edit(Request $request, Echantillon $echantillon): Response
     {
         $concours = $this->session->recup();
+        $roles = $this->getUser()->getRoles();
+        $admin = 0;
+        if(in_array('ROLE_ADMIN',$roles) || in_array('ROLE_SUPER_ADMIN',$roles)){
+            $admin = 1;
+        }
+
         if($concours == 'vide'){
             return $this->redirectToRoute('concours_choix');
         }
+
         $form = $this->createForm(EchantillonEditType::class, $echantillon);
         $form->handleRequest($request);
 
@@ -197,8 +209,10 @@ class EchantillonController extends AbstractController
             return $this->redirectToRoute('dashboard');
 
         }
+        
 
-        return $this->render('echantillon/add.html.twig', [
+        return $this->render('echantillon/edit.html.twig', [
+            'admin' => $admin,
             'categorie' => $echantillon,
             'concours' => $concours,
             'form' => $form->createView(),

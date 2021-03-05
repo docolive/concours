@@ -11,12 +11,6 @@
     {{ form_row(form.lot) }}
     {{ form_row(form.volume) }}
     {{ form_row(form.description) }} 
-
-    {% if admin == 1 %}
-    {{ form_row(form.recu) }}
-    {{ form_row(form.paye) }}
-    
-    {% endif %}
     
 <button class="btn btn-success mt-4" id="enregistreur">{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }}

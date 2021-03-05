@@ -68,6 +68,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ;
     }
 
+    /**
+    * @return User[] Returns an array of User objects
+    */
+    public function findCandidatsPourAdmin()
+    {
+        return $this->createQueryBuilder('u')
+            ->orderBy('u.email', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 /**
     * @return User[] Returns an array of User objects
     */

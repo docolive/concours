@@ -151,6 +151,22 @@ public function edit( Request $request, User $user): Response
     }   
 
     /**
+    * @Route("/touscandidats", name="tous_candidat_index")
+    */
+    public function tousCandidatsIndex(UserRepository $userRepository): Response
+    {
+        $users = $userRepository->findCandidatsPourAdmin();
+        //dd($users);
+        return $this->render('user/index.html.twig', [
+            'titre' => "Liste de tous les candidats",
+            'droits' => false,
+            'email' => true,
+            'utilisateur' => 'candidat',
+            'users' => $users
+        ]);
+    }  
+
+    /**
      * @Route("/{id}", name="user_delete", methods={"DELETE"})
      */
     public function delete(Request $request, User $user): Response
