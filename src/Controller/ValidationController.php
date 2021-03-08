@@ -41,11 +41,11 @@ class ValidationController extends AbstractController
         $user = $this->getUser();
         $concours = $this->session->recup();
         $admins = $userRepository->findByRoleAdmin();
-        $cc = array();
+        $cc = "c.avallone@ctolivier.org";
 
-        foreach($admins as $a){
-            $cc[]= $a->getEmail();
-        }
+        // foreach($admins as $a){
+        //     $cc[]= $a->getEmail();
+        // }
         //dd($cc);
         $message = "Bonjour ".$user->getProfil()->getPrenom().' '.$user->getProfil()->getNom().",";
         $message .= "<br><br>Nous avons bien enregistré votre inscription au Concours ".$concours->getName()." et vous en remercions.";
@@ -64,8 +64,7 @@ class ValidationController extends AbstractController
         $email = (new Email())
             ->from('contact@franceolive.com')
             ->to($user->getEmail())
-            ->cc($cc[0])
-            ->addCc($cc[1])
+            ->cc($cc)
             //->addCc($cc[2])
             //->addCc($cc[3])
             ->bcc('jean-michel.duriez@franceolive.fr')
@@ -126,9 +125,9 @@ class ValidationController extends AbstractController
         $concours = $this->session->recup();
         $user = $this->getUser();
         $echantillons = $echantillonRepository->findAllEchUser($user,$concours);
-        $HT = count($echantillons) * $concours->getCout();
-        $tauxTVA = $concours->getTVA();
-        $TVA = $HT * $tauxTVA / 100;
+        $HT = round(count($echantillons) * $concours->getCout(),2);
+        $tauxTVA = round($concours->getTVA(),2);
+        $TVA = round($HT * $tauxTVA / 100,2);
         $TTC = count($echantillons) * 20;
 
         $livraisons = $livraisonRepository->findAll();
