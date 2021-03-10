@@ -30,13 +30,14 @@ class CheckNbreEchValidator extends ConstraintValidator
 
         }else{
             $maxEch = $echantillon->getCategorie()->getType()->getNbreMaxEch();
-            $echs = $this->repo->findEchMemeType($echantillon->getUser(),$echantillon->getCategorie()->getType());
+            $echs = $this->repo->findEchMemeCategorie($echantillon->getUser(),$echantillon->getCategorie());
         }
         $lim = count($echs) + 1;
         
         if($lim > $maxEch){
         $this->context->buildViolation($constraint->message)
             ->setParameter('{{ lim }}', $maxEch)
+            ->atPath('categorie')
             ->addViolation();
         }
     }

@@ -40,6 +40,21 @@ class EchantillonRepository extends ServiceEntityRepository
     /**
     * @return Echantillon[] Returns an array of Echantillon objects
     */
+    public function findEchMemeCategorie($user,$categorie)
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.user = :user')
+            ->andWhere('e.categorie = :categorie')
+            ->setParameter('categorie', $categorie)
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+    * @return Echantillon[] Returns an array of Echantillon objects
+    */
     public function findEchMemeType($user,$type)
     {
         return $this->createQueryBuilder('e')
@@ -73,6 +88,8 @@ class EchantillonRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    
 
     /**
     * @return Echantillon[] Returns an array of Echantillon objects
