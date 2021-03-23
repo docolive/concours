@@ -11,6 +11,8 @@ use App\Validator as MyAssert;
 
 /**
  * @ORM\Entity(repositoryClass=ProfilRepository::class)
+ * @MyAssert\CheckSiret(groups={"add","edit"})
+ * 
  */
 class Profil
 {
@@ -28,6 +30,7 @@ class Profil
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le nom est obligatoire")
      */
     private $nom;
 
@@ -74,7 +77,6 @@ class Profil
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @MyAssert\ChecKSiret
      */
     private $siret;
 

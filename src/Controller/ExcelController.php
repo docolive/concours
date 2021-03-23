@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+/**
+ * @Route("/excel")
+ */
 class ExcelController extends AbstractController
 {
     private $session;
@@ -17,7 +20,7 @@ class ExcelController extends AbstractController
         $this->session = $concoursSession;
     }
     /**
-     * @Route("/excel", name="excel")
+     * @Route("/echantillons", name="echantillons-liste-excel")
      */
     public function index(EchantillonRepository $echantillonRepository): Response
     {
@@ -41,14 +44,17 @@ class ExcelController extends AbstractController
         $sheet->setCellValue('H2', 'Adresse 5');
         $sheet->setCellValue('I2', 'Téléphone');
         $sheet->setCellValue('J2', 'Catégorie');
-        $sheet->setCellValue('K2', 'Variété OT');
-        $sheet->setCellValue('L2', 'Description');
-        $sheet->setCellValue('M2', 'Lot');
-        $sheet->setCellValue('N2', 'Volume');
-        $sheet->setCellValue('O2', 'Code public');
-        $sheet->setCellValue('P2', 'Code ano');
-        $sheet->setCellValue('Q2', 'Mode paiement');
-        $sheet->setCellValue('R2', 'Payé');
+        $sheet->setCellValue('k2', 'Procédé');
+        $sheet->setCellValue('l2', 'Variété OT');
+        $sheet->setCellValue('M2', 'Description');
+        $sheet->setCellValue('N2', 'Lot');
+        $sheet->setCellValue('O2', 'Volume');
+        $sheet->setCellValue('P2', 'Code public');
+        $sheet->setCellValue('Q2', 'Code ano');
+        $sheet->setCellValue('R2', 'Mode paiement');
+        $sheet->setCellValue('S2', 'Payé');
+        $sheet->setCellValue('T2', 'Lieu de livraison');
+        $sheet->setCellValue('U2', 'Observation');
 
         $l = 3;
         foreach($echantillons as $e){
@@ -62,14 +68,32 @@ class ExcelController extends AbstractController
             $sheet->setCellValue('H'.$l, $e->getUser()->getProfil()->getAdress5());
             $sheet->setCellValue('I'.$l, $e->getUser()->getProfil()->getPhone());
             $sheet->setCellValue('J'.$l, $e->getCategorie()->getName());
-            $sheet->setCellValue('K'.$l, $e->getVariety());
-            $sheet->setCellValue('L'.$l, $e->getDescription());
-            $sheet->setCellValue('M'.$l, $e->getLot());
-            $sheet->setCellValue('N'.$l, $e->getVolume());
-            $sheet->setCellValue('O'.$l, $e->getCode());
-            $sheet->setCellValue('P'.$l, '');
+            if(is_null($e->getProcede())){
+                $procede = '';
+            }else{
+                $procede = $e->getProcede()->getName();
+            }
+            $sheet->setCellValue('K'.$l, $procede);
+            $sheet->setCellValue('L'.$l, $e->getVariety());
+            $sheet->setCellValue('M'.$l, $e->getDescription());
+            $sheet->setCellValue('N'.$l, $e->getLot());
+            $sheet->setCellValue('O'.$l, $e->getVolume());
+            $sheet->setCellValue('P'.$l, $e->getPublicRef());
             $sheet->setCellValue('Q'.$l, '');
-            $sheet->setCellValue('R'.$l, '');
+            if(is_null($e->getPaiement())){
+                $paiement = '';
+            }else{
+                $paiement = $e->getPaiement()->getId();
+            }
+            $sheet->setCellValue('R'.$l, $paiement);
+            $sheet->setCellValue('S'.$l, $e->getPaye());
+            if(is_null($e->getLivraison())){
+                $livraison = '';
+            }else{
+                $livraison = $e->getLivraison()->getId();
+            }
+            $sheet->setCellValue('T'.$l, $livraison);
+            $sheet->setCellValue('U'.$l, $e->getObservation());
 
             $l++;
         }

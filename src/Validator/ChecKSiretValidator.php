@@ -7,17 +7,17 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class ChecKSiretValidator extends ConstraintValidator
 {
-    public function validate($value, Constraint $constraint)
+    public function validate($profil, Constraint $constraint)
     {
         /* @var $constraint \App\Validator\ChecKSiret */
 
-        if (null === $value || '' === $value) {
+        if (null === $profil->getSiret() || '' === $profil->getSiret() || $profil->getJure() == true) {
             return;
         }
 
-        if($this->is_siret($value) != 0){
+        if($this->is_siret($profil->getSiret()) != 0){
             $this->context->buildViolation($constraint->message)
-                ->setParameter('{{ value }}', $value)
+                //->setParameter('{{ value }}', $echantillon->getSiret())
                 ->addViolation();
         }
     }
