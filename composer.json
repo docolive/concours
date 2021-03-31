@@ -1,4 +1,6 @@
 {
+    "name": "some/name",
+    "description": "Some description will be useful too!",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "dev",

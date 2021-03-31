@@ -112,6 +112,9 @@
 
                 <a href="{{ path('profil_admin_edit', {'userId': user.id}) }}">
                     <button class="btn btn-success btn-sm py-0" style="font-size: 0.8em;">profil</button></a>
+                
+                <a href="{{ path('admin_candidat_echantillons', {'userId': user.id}) }}">
+                    <button class="btn btn-warning btn-sm py-0" style="font-size: 0.8em;">échantillons</button></a>
                 {% endif %}
 
                 </td>
