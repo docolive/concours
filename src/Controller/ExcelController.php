@@ -43,18 +43,19 @@ class ExcelController extends AbstractController
         $sheet->setCellValue('G2', 'Adresse 4');
         $sheet->setCellValue('H2', 'Adresse 5');
         $sheet->setCellValue('I2', 'Téléphone');
-        $sheet->setCellValue('J2', 'Catégorie');
-        $sheet->setCellValue('k2', 'Procédé');
-        $sheet->setCellValue('l2', 'Variété OT');
-        $sheet->setCellValue('M2', 'Description');
-        $sheet->setCellValue('N2', 'Lot');
-        $sheet->setCellValue('O2', 'Volume');
-        $sheet->setCellValue('P2', 'Code public');
-        $sheet->setCellValue('Q2', 'Code ano');
-        $sheet->setCellValue('R2', 'Mode paiement');
-        $sheet->setCellValue('S2', 'Payé');
-        $sheet->setCellValue('T2', 'Lieu de livraison');
-        $sheet->setCellValue('U2', 'Observation');
+        $sheet->setCellValue('J2', 'Email');
+        $sheet->setCellValue('K2', 'Catégorie');
+        $sheet->setCellValue('L2', 'Procédé');
+        $sheet->setCellValue('M2', 'Variété OT');
+        $sheet->setCellValue('N2', 'Description');
+        $sheet->setCellValue('O2', 'Lot');
+        $sheet->setCellValue('P2', 'Volume');
+        $sheet->setCellValue('Q2', 'Code public');
+        $sheet->setCellValue('R2', 'Code ano');
+        $sheet->setCellValue('S2', 'Mode paiement');
+        $sheet->setCellValue('T2', 'Payé');
+        $sheet->setCellValue('U2', 'Lieu de livraison');
+        $sheet->setCellValue('V2', 'Observation');
 
         $l = 3;
         foreach($echantillons as $e){
@@ -67,33 +68,34 @@ class ExcelController extends AbstractController
             $sheet->setCellValue('G'.$l, $e->getUser()->getProfil()->getAdress4());
             $sheet->setCellValue('H'.$l, $e->getUser()->getProfil()->getAdress5());
             $sheet->setCellValue('I'.$l, $e->getUser()->getProfil()->getPhone());
-            $sheet->setCellValue('J'.$l, $e->getCategorie()->getName());
+            $sheet->setCellValue('J'.$l, $e->getUser()->getEmail());
+            $sheet->setCellValue('K'.$l, $e->getCategorie()->getName());
             if(is_null($e->getProcede())){
                 $procede = '';
             }else{
                 $procede = $e->getProcede()->getName();
             }
-            $sheet->setCellValue('K'.$l, $procede);
-            $sheet->setCellValue('L'.$l, $e->getVariety());
-            $sheet->setCellValue('M'.$l, $e->getDescription());
-            $sheet->setCellValue('N'.$l, $e->getLot());
-            $sheet->setCellValue('O'.$l, $e->getVolume());
-            $sheet->setCellValue('P'.$l, $e->getPublicRef());
-            $sheet->setCellValue('Q'.$l, '');
+            $sheet->setCellValue('L'.$l, $procede);
+            $sheet->setCellValue('M'.$l, $e->getVariety());
+            $sheet->setCellValue('N'.$l, $e->getDescription());
+            $sheet->setCellValue('O'.$l, $e->getLot());
+            $sheet->setCellValue('P'.$l, $e->getVolume());
+            $sheet->setCellValue('Q'.$l, $e->getPublicRef());
+            $sheet->setCellValue('R'.$l, '');
             if(is_null($e->getPaiement())){
                 $paiement = '';
             }else{
                 $paiement = $e->getPaiement()->getId();
             }
-            $sheet->setCellValue('R'.$l, $paiement);
-            $sheet->setCellValue('S'.$l, $e->getPaye());
+            $sheet->setCellValue('S'.$l, $paiement);
+            $sheet->setCellValue('T'.$l, $e->getPaye());
             if(is_null($e->getLivraison())){
                 $livraison = '';
             }else{
                 $livraison = $e->getLivraison()->getId();
             }
-            $sheet->setCellValue('T'.$l, $livraison);
-            $sheet->setCellValue('U'.$l, $e->getObservation());
+            $sheet->setCellValue('U'.$l, $livraison);
+            $sheet->setCellValue('V'.$l, $e->getObservation());
 
             $l++;
         }

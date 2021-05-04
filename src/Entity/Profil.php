@@ -9,9 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Validator as MyAssert;
 
+//@MyAssert\CheckSiret(groups={"add","edit"})
+
 /**
  * @ORM\Entity(repositoryClass=ProfilRepository::class)
- * @MyAssert\CheckSiret(groups={"add","edit"})
+ * 
  * 
  */
 class Profil
