@@ -105,10 +105,15 @@ class Echantillon
 
     /**
      * @ORM\ManyToOne(targetEntity=Procede::class, inversedBy="echantillons")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      * 
      */
     private $procede;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Table::class, inversedBy="echantillons")
+     */
+    private $tableJury;
 
     public function getId(): ?int
     {
@@ -291,6 +296,18 @@ class Echantillon
     public function setProcede(?Procede $procede): self
     {
         $this->procede = $procede;
+
+        return $this;
+    }
+
+    public function getTableJury(): ?Table
+    {
+        return $this->tableJury;
+    }
+
+    public function setTableJury(?Table $tableJury): self
+    {
+        $this->tableJury = $tableJury;
 
         return $this;
     }

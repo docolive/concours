@@ -50,11 +50,22 @@ class Categorie
      */
     private $procedes;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Table::class, mappedBy="categorie")
+     */
+    private $tables;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Concours::class, inversedBy="categorie")
+     */
+    private $concours;
+
     public function __construct()
     {
         $this->echantillons = new ArrayCollection();
         $this->jures = new ArrayCollection();
         $this->procedes = new ArrayCollection();
+        $this->tables = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -181,6 +192,48 @@ class Categorie
                 $procede->setCategorie(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Table[]
+     */
+    public function getTables(): Collection
+    {
+        return $this->tables;
+    }
+
+    public function addTable(Table $table): self
+    {
+        if (!$this->tables->contains($table)) {
+            $this->tables[] = $table;
+            $table->setCategorie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTable(Table $table): self
+    {
+        if ($this->tables->removeElement($table)) {
+            // set the owning side to null (unless already changed)
+            if ($table->getCategorie() === $this) {
+                $table->setCategorie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getConcours(): ?Concours
+    {
+        return $this->concours;
+    }
+
+    public function setConcours(?Concours $concours): self
+    {
+        $this->concours = $concours;
 
         return $this;
     }

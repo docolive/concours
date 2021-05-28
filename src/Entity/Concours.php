@@ -109,10 +109,16 @@ class Concours
      */
     private $types;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Categorie::class, mappedBy="concours")
+     */
+    private $categorie;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
         $this->types = new ArrayCollection();
+        $this->categorie = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -348,6 +354,36 @@ class Concours
             // set the owning side to null (unless already changed)
             if ($type->getConcours() === $this) {
                 $type->setConcours(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Categorie[]
+     */
+    public function getCategorie(): Collection
+    {
+        return $this->categorie;
+    }
+
+    public function addCategorie(Categorie $categorie): self
+    {
+        if (!$this->categorie->contains($categorie)) {
+            $this->categorie[] = $categorie;
+            $categorie->setConcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategorie(Categorie $categorie): self
+    {
+        if ($this->categorie->removeElement($categorie)) {
+            // set the owning side to null (unless already changed)
+            if ($categorie->getConcours() === $this) {
+                $categorie->setConcours(null);
             }
         }
 

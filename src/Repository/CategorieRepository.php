@@ -18,6 +18,16 @@ class CategorieRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Categorie::class);
     }
+    public function findFromConcours($concours){
+        return $this->createQueryBuilder('c')
+        ->where('c.concours = :concours')
+        ->orderBy('c.name','ASC')
+        ->setParameter('concours',$concours)
+        ->getQuery()
+        ->getResult()
+        ;
+    
+    }
 
     // /**
     //  * @return Categorie[] Returns an array of Categorie objects
