@@ -23,6 +23,22 @@ class ProcedeRepository extends ServiceEntityRepository
      * @return Procede[] Returns an array of Procede objects
      */
     
+    public function findFromConcours($concours)
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.categorie','c')
+            ->join('c.type','t')
+            ->andWhere('t.concours = :concours')
+            ->setParameter('concours', $concours)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Procede[] Returns an array of Procede objects
+     */
+    
     public function findProcedes($categorie)
     {
         return $this->createQueryBuilder('p')

@@ -35,7 +35,7 @@ class ConcoursController extends AbstractController
             return $this->redirectToRoute('concours_choix');
         }
 
-        $file = 'reglements/brignoles-2021.pdf';
+        $file = 'reglements/brignoles-2022.pdf';
         return new BinaryFileResponse($file);
 
     }
@@ -61,8 +61,18 @@ class ConcoursController extends AbstractController
     public function choix(ConcoursRepository $concoursRepository): Response
     {
         $user = $this->getUser();
+        //dd($user);
+        //dd($concoursRepository->findConcoursOuverts($user));
+        $roles = $user->getRoles();
+        //dd($roles);
+                if(in_array("ROLE_ADMIN",$roles) || in_array("ROLE_SUPER_ADMIN",$roles)){
+                    $concourses = $concoursRepository->findAll();
+                }
+                if(in_array("ROLE_CANDIDAT",$roles)){
+                    $concourses = $concoursRepository->findConcoursOuverts($user);
+                }
         return $this->render('concours/choix.html.twig', [
-            'concourses' => $concoursRepository->findConcoursOuverts($user)
+            'concourses' => $concourses
         ]);
     }
 

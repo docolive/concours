@@ -28,14 +28,15 @@ class ProcedeController extends AbstractController
     /**
      * @Route("/", name="procede_index", methods={"GET"})
      */
+
     public function index(ProcedeRepository $procedeRepository): Response
     {
+        $concours = $this->session->recup();
+        if($concours == 'vide'){
+            return $this->redirectToRoute('concours_choix');
+        }
         return $this->render('procede/index.html.twig', [
-            'procedes' => $procedeRepository
-            ->findBy(
-                array(),
-                array('categorie' => 'ASC')
-            )
+            'procedes' => $procedeRepository->findFromConcours($concours)
         ]);
     }
 
@@ -90,12 +91,13 @@ class ProcedeController extends AbstractController
     public function delete(Request $request, Procede $procede): Response
     {
         if ($this->isCsrfTokenValid('delete'.$procede->getId(), $request->request->get('_token'))) {
-            //vérifier que ce procédé n'est pas utilisé dans une catégorie
+            //vérifier que ce  n'est pas utilisé dans une catégorie
             $categories = $procede->getCategorie();
-            if(count($categories) > 0){
+            //dd($categories);
+            if(!null === $categories){
                 $this->addFlash(
                     'warning',
-                    'Impossible de supprimer ce procédé qui est utilisé dans une catégorie'
+                    'Impossible de supprimer cette sous-catégorie qui est utilisée dans une catégorie'
                 );
                 return $this->redirectToRoute('procede_index');
             }

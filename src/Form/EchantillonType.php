@@ -85,6 +85,7 @@ class EchantillonType extends AbstractType
 
                         $form->add('procede', EntityType::class, [
                             'class' => Procede::class,
+                            'label' => 'Sous-catégorie',
                             'required' => false,
                             'placeholder' => '...',
                             'query_builder' => function (ProcedeRepository $prepo) {

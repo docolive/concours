@@ -109,16 +109,15 @@ class Concours
      */
     private $types;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Categorie::class, mappedBy="concours")
-     */
-    private $categorie;
+    // /**
+    //  * @ORM\OneToMany(targetEntity=Categorie::class, mappedBy="concours")
+    //  */
+    // private $categories;
 
     public function __construct()
     {
-        $this->categories = new ArrayCollection();
+        // $this->categories = new ArrayCollection();
         $this->types = new ArrayCollection();
-        $this->categorie = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -360,33 +359,33 @@ class Concours
         return $this;
     }
 
-    /**
-     * @return Collection|Categorie[]
-     */
-    public function getCategorie(): Collection
-    {
-        return $this->categorie;
-    }
+    // /**
+    //  * @return Collection|Categories[]
+    //  */
+    // public function getCategories(): Collection
+    // {
+    //     return $this->categories;
+    // }
 
-    public function addCategorie(Categorie $categorie): self
-    {
-        if (!$this->categorie->contains($categorie)) {
-            $this->categorie[] = $categorie;
-            $categorie->setConcours($this);
-        }
+    // public function addCategorie(Categorie $categorie): self
+    // {
+    //     if (!$this->categories->contains($categorie)) {
+    //         $this->categories[] = $categorie;
+    //         $categorie->setConcours($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeCategorie(Categorie $categorie): self
-    {
-        if ($this->categorie->removeElement($categorie)) {
-            // set the owning side to null (unless already changed)
-            if ($categorie->getConcours() === $this) {
-                $categorie->setConcours(null);
-            }
-        }
+    // public function removeCategorie(Categorie $categorie): self
+    // {
+    //     if ($this->categories->removeElement($categorie)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($categorie->getConcours() === $this) {
+    //             $categorie->setConcours(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }

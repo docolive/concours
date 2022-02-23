@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Concours CTO - devenir candidat{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/css/jquery-ui.css">
+    <link rel="stylesheet" href="/css/jquery-ui.theme.css">
+    <link rel="stylesheet" href="/css/table-filtering/excel-bootstrap-table-filter-style.css">
+
+{% endblock %}
+
+{% block body %}
+
+{{form(form)}}
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $( "#form_search" ).autocomplete({
+            source: "{{path('user-search-name')}}",
+            minLength: 2,
+            select: function( event, ui ) {
+                $('#form_search').val(ui.item.label);
+                $('#form_userName').val(ui.item.name);
+                var userName = $('#form_userName').val();
+
+                var url = "{{path('dashboard')}}?_switch_user="+userName;
+                // alert(url);
+                
+                $(location).prop('href', url);
+            }
+        });
+
+</script> 
+
+<script src="/js/table-filtering/excel-bootstrap-table-filter-bundle.js"></script>
+<script>$('table').excelTableFilter();</script>
+{% endblock %}
+
+

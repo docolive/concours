@@ -30,12 +30,12 @@ class CategorieController extends AbstractController
      */
     public function index(CategorieRepository $categorieRepository): Response
     {
+        $concours = $this->session->recup();
+        if($concours == 'vide'){
+            return $this->redirectToRoute('concours_choix');
+        }
         return $this->render('categorie/index.html.twig', [
-            'categories' => $categorieRepository
-            ->findBy(
-                array(),
-                array('ordre' => 'ASC')
-            )
+            'categories' => $categorieRepository->findFromConcours($concours)
         ]);
     }
 
@@ -53,6 +53,8 @@ class CategorieController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // dd($concours);
+            // $categorie->setConcours($concours);
            
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($categorie);

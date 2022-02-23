@@ -12,5 +12,5 @@ class CheckProcede extends Constraint
         {
             return self::CLASS_CONSTRAINT;
         }
-    public $message = "Merci de choisir le procédé de fabrication dans la liste ci-dessous.";
+    public $message = "Merci de choisir la sous-catégorie dans la liste ci-dessous.";
 }

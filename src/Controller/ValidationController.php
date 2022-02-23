@@ -41,7 +41,7 @@ class ValidationController extends AbstractController
         $user = $this->getUser();
         $concours = $this->session->recup();
         $admins = $userRepository->findByRoleAdmin();
-        $cc = "c.avallone@ctolivier.org";
+        $cc = "c.aitikhlef@ctolivier.org";
 
         // foreach($admins as $a){
         //     $cc[]= $a->getEmail();
@@ -56,7 +56,7 @@ class ValidationController extends AbstractController
         }else{
             $message .= "<br><br>Vous avez la possibilité d'être éventuellement juré(e) dans ce Concours.<br>Il suffit de <a href=\"https://concours.ctolivier.org\">vous connecter</a> et de cliquer sur \"m'inscrire comme juré(e)\" .";
         }
-        $message .= "<br><br>Vous pouvez contacter les organisateurs au 04 42 23 01 92 ou bien par mail : c.avallone@ctolivier.org .";
+        $message .= "<br><br>Vous pouvez contacter les organisateurs au 04 42 23 84 80 ou bien par mail : c.aitikhlef@ctolivier.org .";
         $message .= "<br><br>Vous trouverez ci-joint votre bulletin d'inscription.";
         $message .= "<br><br><br>Cordialement,";
         $message .= "<br><br><br>Les organisateurs du Concours";
@@ -67,7 +67,7 @@ class ValidationController extends AbstractController
             ->cc($cc)
             //->addCc($cc[2])
             //->addCc($cc[3])
-            ->bcc('jean-michel.duriez@franceolive.fr')
+            ->bcc('docolivefr@gmail.com')
             ->replyTo('contact@franceolive.com')
             //->priority(Email::PRIORITY_HIGH)
             ->subject('Bulletin de participation au concours ')
@@ -128,7 +128,7 @@ class ValidationController extends AbstractController
         $HT = round(count($echantillons) * $concours->getCout(),2);
         $tauxTVA = round($concours->getTVA(),2);
         $TVA = round($HT * $tauxTVA / 100,2);
-        $TTC = count($echantillons) * 20;
+        $TTC = $HT + $TVA;
 
         $livraisons = $livraisonRepository->findAll();
         $options = array();

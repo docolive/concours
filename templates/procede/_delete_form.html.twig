@@ -1,4 +1,4 @@
-<form method="post" action="{{ path('type_delete', {'id': procede.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer ce procédé ?');" style="display:inline-block">
+<form method="post" action="{{ path('procede_delete', {'id': procede.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cette sous-catégorie ?');" style="display:inline-block">
     <input type="hidden" name="_method" value="DELETE">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ procede.id) }}">
     <button class="btn btn-danger btn-sm py-0" style="font-size: 0.8em;"><i class="fas fa-trash-alt"></i></button></a>

@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\User;
 use App\Security\EmailVerifier;
 use App\Form\RegistrationFormType;
+use App\Repository\UserRepository;
 use Symfony\Component\Mime\Address;
 use App\Security\AppUserAuthenticator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -46,6 +48,7 @@ class RegistrationController extends AbstractController
                 )
             );
             $user->setRoles( array('ROLE_CANDIDAT') );
+            $user->setCreatedAt(new DateTime());
             //dd($user);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
@@ -75,13 +78,17 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/verify/email", name="app_verify_email")
      */
-    public function verifyUserEmail(Request $request): Response
+    public function verifyUserEmail(Request $request,UserRepository $userRepository): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $user = $userRepository->find($request->query->get('id'));
+        //dd($user);
+        if (!$user) {
+            throw $this->createNotFoundException();
+        }
 
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
-            $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
+            $this->emailVerifier->handleEmailConfirmation($request, $user);
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('error', $exception->getReason());
 

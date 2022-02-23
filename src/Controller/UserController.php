@@ -3,14 +3,19 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\EchantillonRepository;
 use App\Service\ConcoursSession;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
 
 /**
  * @Route("/admin/user")
@@ -18,9 +23,58 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserController extends AbstractController{
     private $session;
     private $encoder;
-    public function __construct(UserPasswordEncoderInterface $encoder,ConcoursSession $concoursSession){
+    private $userRepository;
+    public function __construct(UserPasswordEncoderInterface $encoder,ConcoursSession $concoursSession, UserRepository $userRepository){
         $this->encoder = $encoder;
         $this->session = $concoursSession;
+        $this->userRepository = $userRepository;
+    }
+
+    /**
+     * @Route("/admin/user/search", name="user-search-name")
+     */
+    public function userserSearchName(Request $request): Response
+    {
+        $param = $request->query->get('term');
+        $users = $this->userRepository->findSearch($param);
+        //dd($users);
+        $result = array();
+        foreach($users as $u){
+            //dd($u->getPrenom());
+            $r = "";
+            foreach($u->getRoles() as $r){
+                
+                $r .= $r.", ";
+                
+            }
+            
+            $label = "Prénom : ";
+            if(!is_null($u->getProfil()->getPrenom())){
+                    $label .= $u->getProfil()->getPrenom();
+            }
+
+            $label .= " - Nom : ";
+            if(!is_null($u->getProfil()->getNom())){
+                    $label .= $u->getProfil()->getNom();
+            }
+
+            $label .= " - Email : ";
+            if(!is_null($u->getEmail())){
+                    $label .= $u->getEmail();
+            }
+            $label .= " - Raison sociale : ";
+            if(!is_null($u->getProfil()->getRaisonSociale())){
+                    $label .= $u->getProfil()->getRaisonSociale();
+            }
+
+            $result[] = array(
+                'name' => $u->getEmail(),
+                'label' => $label
+                );
+        }
+    
+        // dd(new JsonResponse($result));
+        return new JsonResponse($result);
     }
 
 /**
@@ -133,14 +187,14 @@ public function edit( Request $request, User $user): Response
     /**
     * @Route("/candidats", name="candidat_index")
     */
-    public function candidatsIndex(UserRepository $userRepository): Response
+    public function candidatsIndex(UserRepository $userRepository, EchantillonRepository $echantillonRepository): Response
     {
         $concours = $this->session->recup();
         if($concours == 'vide'){
             return $this->redirectToRoute('concours_choix');
         }
         $users = $userRepository->findCandidats($concours);
-        //dd($users);
+        
         return $this->render('user/index.html.twig', [
             'titre' => "Liste des candidats",
             'droits' => false,
@@ -179,5 +233,31 @@ public function edit( Request $request, User $user): Response
         }
 
         return $this->redirectToRoute('user_index');
+    }
+
+    /**
+     * @Route("/admin/switch/choice",name="user-switch-choice")
+     */
+    public function switchChoice(Request $request){
+        $defaultData = ['message' => 'Type your message here'];
+        $form = $this->createFormBuilder($defaultData)
+            ->add('search', TextType::class,[
+                'attr' => [
+                    'placeholder' => "Nom, Prénom, raison sociale, email"
+                ]
+            ])
+            ->add('userName',HiddenType::class)
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // data is an array with "name", "email", and "message" keys
+            $data = $form->getData();
+        }
+
+        return $this->render('user/switchchoice.html.twig',[
+            'form' => $form->createView()
+        ]);
     }
 }

@@ -143,7 +143,7 @@ class PDFService
 
         $HT = round($concours->getCout() * count($echantillons),2);
         $TVA = round($concours->getTVA() * $HT / 100,2);
-        $TTC = round(count($echantillons) * 20,2);
+        $TTC = round($HT + $TVA,2);
 
         $pdf->Write(5,"",'',false,'C',1);
         $pdf->SetFont('dejavusans', '', 10, '', true);

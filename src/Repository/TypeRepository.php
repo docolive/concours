@@ -19,6 +19,17 @@ class TypeRepository extends ServiceEntityRepository
         parent::__construct($registry, Type::class);
     }
 
+    public function findFromConcours($concours){
+        return $this->createQueryBuilder('t')
+        ->where('t.concours = :concours')
+        ->orderBy('t.nom','ASC')
+        ->setParameter('concours',$concours)
+        ->getQuery()
+        ->getResult()
+        ;
+    
+    }
+
     // /**
     //  * @return Type[] Returns an array of Type objects
     //  */

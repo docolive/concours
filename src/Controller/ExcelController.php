@@ -45,7 +45,7 @@ class ExcelController extends AbstractController
         $sheet->setCellValue('I2', 'Téléphone');
         $sheet->setCellValue('J2', 'Email');
         $sheet->setCellValue('K2', 'Catégorie');
-        $sheet->setCellValue('L2', 'Procédé');
+        $sheet->setCellValue('L2', 'Sous-catégorie');
         $sheet->setCellValue('M2', 'Variété OT');
         $sheet->setCellValue('N2', 'Description');
         $sheet->setCellValue('O2', 'Lot');

@@ -55,10 +55,10 @@ class Categorie
      */
     private $tables;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Concours::class, inversedBy="categorie")
-     */
-    private $concours;
+    // /**
+    //  * @ORM\ManyToOne(targetEntity=Concours::class, inversedBy="categories")
+    //  */
+    // private $concours;
 
     public function __construct()
     {
@@ -226,15 +226,15 @@ class Categorie
         return $this;
     }
 
-    public function getConcours(): ?Concours
-    {
-        return $this->concours;
-    }
+    // public function getConcours(): ?Concours
+    // {
+    //     return $this->concours;
+    // }
 
-    public function setConcours(?Concours $concours): self
-    {
-        $this->concours = $concours;
+    // public function setConcours(?Concours $concours): self
+    // {
+    //     $this->concours = $concours;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }

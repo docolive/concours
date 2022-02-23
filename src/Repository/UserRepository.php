@@ -22,6 +22,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         parent::__construct($registry, User::class);
     }
 
+    public function findSearch($param){
+        return $this->createQueryBuilder('u')
+            ->innerJoin('u.profil','p')
+            ->where('u.email LIKE :param')
+            ->orWhere('p.nom LIKE :param')
+            ->orWhere('p.prenom LIKE :param')
+            ->orWhere('p.raison_sociale LIKE :param')
+            ->setParameter('param',"%".$param."%")
+            ->getQuery()
+            ->getResult();
+    }
+
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
@@ -57,10 +69,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function findCandidats($concours)
     {
         return $this->createQueryBuilder('u')
-            ->innerJoin('u.profil','p')
-            ->innerJoin('u.echantillons','e')
-            ->innerJoin('e.categorie','c')
-            ->innerJoin('c.type','t','WITH','t.concours = :concours')
+            ->Join('u.profil','p')
+            ->Join('u.echantillons','e')
+            ->Join('e.categorie','c')
+            ->Join('c.type','t')
+            ->where('t.concours = :concours')
+            // ->andWhere('count(e.id) > 0')
             ->orderBy('p.nom', 'ASC')
             ->setParameter('concours', $concours)
             ->getQuery()

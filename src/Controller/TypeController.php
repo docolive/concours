@@ -30,12 +30,13 @@ class TypeController extends AbstractController
      */
     public function index(TypeRepository $typeRepository): Response
     {
+        $concours = $this->session->recup();
+        if($concours == 'vide'){
+            return $this->redirectToRoute('concours_choix');
+        }
         return $this->render('type/index.html.twig', [
             'types' => $typeRepository
-            ->findBy(
-                array(),
-                array('ordre' => 'ASC')
-            )
+            ->findFromConcours($concours)
         ]);
     }
 

@@ -105,7 +105,7 @@ class Echantillon
 
     /**
      * @ORM\ManyToOne(targetEntity=Procede::class, inversedBy="echantillons")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=false)
      * 
      */
     private $procede;
