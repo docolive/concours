@@ -51,7 +51,6 @@ class Echantillon
      */
     private $volume;
     
-
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -113,7 +112,7 @@ class Echantillon
     /**
      * @ORM\ManyToOne(targetEntity=Table::class, inversedBy="echantillons")
      */
-    private $tableJury;
+    private $tableJury;  
 
     public function getId(): ?int
     {

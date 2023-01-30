@@ -30,6 +30,18 @@ class TypeRepository extends ServiceEntityRepository
     
     }
 
+    public function findFromConcoursAndType($concours,$typeNom){
+        return $this->createQueryBuilder('t')
+        ->where('t.concours = :concours')
+        ->andWhere('t.nom =:typenom')
+        ->setParameter('concours',$concours)
+        ->setParameter('typenom',$typeNom)
+        ->getQuery()
+        ->getResult()
+        ;
+    
+    }
+
     // /**
     //  * @return Type[] Returns an array of Type objects
     //  */

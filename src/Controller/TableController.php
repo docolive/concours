@@ -5,8 +5,10 @@ namespace App\Controller;
 use App\Entity\Table;
 use App\Form\TableType;
 use App\Form\TableEditType;
+use App\Service\GetCategories;
 use App\Service\ConcoursSession;
 use App\Repository\TableRepository;
+use App\Service\GetCategoriesOnTable;
 use App\Repository\CategorieRepository;
 use App\Repository\EchantillonRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,12 +28,14 @@ class TableController extends AbstractController
     private $categorieRepository;
     private $tableRepository;
     private $echantillonRepository;
+    private $getCategories;
 
-    public function __construct(ConcoursSession $concoursSession, CategorieRepository $categorieRepository, TableRepository $tableRepository, EchantillonRepository $echantillonRepository){
+    public function __construct(ConcoursSession $concoursSession, CategorieRepository $categorieRepository, TableRepository $tableRepository, EchantillonRepository $echantillonRepository, GetCategoriesOnTable $getCategories){
         $this->session = $concoursSession;
         $this->categorieRepository = $categorieRepository;
         $this->tableRepository = $tableRepository;
         $this->echantillonRepository = $echantillonRepository;
+        $this->getCategories = $getCategories;
     } 
 
     /**
@@ -44,28 +48,22 @@ class TableController extends AbstractController
             return $this->redirectToRoute('concours_choix');
         }
 
-        //récupération des tables
-        $tables = $this->tableRepository->findAllConcours($concours);
-        $categos = $this->categorieRepository->findFromConcours($concours);
-        $echantillons = $this->echantillonRepository->findEchConcours($concours);
+        $datas = $this->getCategories->categories($concours);
+
+        $categories = $datas['categories'];
+        $categos = $datas['categos'];
+        $echantillons = $datas['echantillons'];
+        $totEchs = $datas['totEchs'];
         
-        //vérification du nombre de catégories  et d'échantillons sur table
-        $categories = array();
-        $totEchs = 0;
-        foreach($tables as $t){
-            if(!in_array($t->getCategorie()->getId(),$categories)){
-                $categories[] = $t->getCategorie()->getId();
-            }
-            $totEchs += $t->getMaxEchs();
-        }
         if(count($categories) != count($categos)){
             $this->addFlash(
                 'error',
-                'Le nombre total de catégories affectées aux tables ne correspond pas au nombre total de catégories du concours !'
+                'Le nombre total de catégories affectées aux tables ('.count($categories).') ne correspond pas au nombre total de catégories du concours ouvertes ('.count($categos).') !'
             );
             return $this->redirectToRoute('table-index');
         }
-
+        //dump(count($echantillons));
+        //dd($totEchs);
         if(count($echantillons) != $totEchs){
             $this->addFlash(
                 'error',
@@ -74,70 +72,143 @@ class TableController extends AbstractController
             return $this->redirectToRoute('table-index');
         }
 
+        return $this->redirectToRoute('table-index');
+    }
+
+    /**
+     * @Route("/table/anonymisation", name="table-anonymisation")
+     */
+    function anonymisation(){
+        $concours = $this->session->recup();
+        if($concours == 'vide'){
+            return $this->redirectToRoute('concours_choix');
+        }
         //répartition par table et anonymat
         $alphabet = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
-        foreach($categories as $c){
-            $categorie = $this->categorieRepository->find($c);
-            if(count($categorie->getTables()) > 0){
-                //Sil n'y a qu'une seule table pour la catégorie
-                //on anonymise les échantillons
-                if(count($categorie->getTables()) == 1){
-                    foreach($categorie->getTables() as $table){
-                        $tableName = $table->getName();
-                    }
-                    $echantillons = $categorie->getEchantillons();
-                    foreach($echantillons as $ech){
-                        //dd($ech);
-                        $lettre1 = $alphabet[rand(0,25)];
-                        $lettre2 = $alphabet[rand(0,25)];
-                        $number = rand(0,9);
-                        $codAno = $tableName.'-'.$lettre1.$lettre2.$number;
-                        //dump($codAno);
-                        $ech->setCode($codAno);
-                        $ech->setTableJury($table);
-                        $em = $this->getDoctrine()->getManager();
-                        $em->persist($ech);
-                        $em->flush();
-                    }
 
-                }else{
-                //s'il y a plusieurs tables  
-                //répartir les échantillons sur les tables
-                $nbreTables = count($categorie->getTables());
-                $echantillons = $categorie->getEchantillons();
-                $totEchs = count($echantillons);
-                $tabIdEchs = [];
-                foreach($echantillons as $e){
-                    $tabIdEchs[] = $e->getId();
-                }
-                shuffle($tabIdEchs);
-                $c = 0;
+        //catégories ouvertes
+        $datas = $this->getCategories->categories($concours);
+        $categories = $datas['categories'];
+        
+        //testano est le tableau qui vérifie l'unicité du code anonymt
+        $testano = array();
+
+    foreach($categories as $c){
+        $categorie = $this->categorieRepository->find($c);
+        if($categorie->getId() !=41){
+            
+        
+        //dump($categorie);
+        //si la catégorie est bien affectée au moins à une table
+        if(count($categorie->getTables()) > 0){
+            //S'il n'y a qu'une seule table pour la catégorie
+            //on anonymise les échantillons
+            if(count($categorie->getTables()) == 1){
                 foreach($categorie->getTables() as $table){
                     $tableName = $table->getName();
-                    
-                    for($i = 0; $i <= $table->getMaxEchs() - 1; $i++){
-                        $ech = $this->echantillonRepository->find($tabIdEchs[$i + $c]);
-                        $lettre1 = $alphabet[rand(0,25)];
-                        $lettre2 = $alphabet[rand(0,25)];
-                        $number = rand(0,9);
-                        $codAno = $tableName.'-'.$lettre1.$lettre2.$number;
-                        //dump($ech->getId());
-                        //dump($codAno);
-                        $ech->setCode($codAno);
-                        $ech->setTableJury($table);
-                        $em = $this->getDoctrine()->getManager();
-                        $em->persist($ech);
-                        $em->flush();
-
-                    }
-                    $c = $i + $c;
                 }
+                $echantillons = $categorie->getEchantillons();
+                foreach($echantillons as $ech){
+                    //dd($ech);
+                    $codAno = $this->getCategories->generateCode($alphabet,$tableName,$testano)['codAno'];
+                    $testano = $this->getCategories->generateCode($alphabet,$tableName,$testano)['testano'];
+                    //dump($codAno);
+                    
+                    $ech->setCode($codAno);
+                    $ech->setTableJury($table);
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($ech);
+                   // dump($em->persist($ech));
+                    $em->flush();
+                }
+
+            }else{
+            //s'il y a plusieurs tables  
+            //répartir les échantillons sur les tables
+            $tables = $categorie->getTables();
+            
+            $echantillons = $categorie->getEchantillons();
+
+            $tabIdEchs = [];
+
+            foreach($echantillons as $e){
+                $tabIdEchs[] = $e->getId();
+            }
+
+            shuffle($tabIdEchs);
+
+            //répartition des échantillons sur les tables 
+            $tabEchs = array();
+
+            $echId = 0;
+
+            foreach($tables as $t){
+                //dd($t);
+                //soit $et = nbre d'échantillons sur la table
+                $et = 0;
+
+                while($et <= $t->getMaxEchs() - 1){
+                    if(isset($tabIdEchs[$echId])){
+                    $tabEchs[$t->getId()][] = $tabIdEchs[$echId];
+                    //dd($tabEchs);
+                    $et++;
+                    $echId++;
+                    }
                 }
             }
+            //dd($tabEchs);
+            $testano = array();
+            $listechs = array();
+            // $listetab = array();
+            $i = 0;
+            foreach($tabEchs as $k => $echIds){
+                //dump($k);
+               // dump($echIds);
+                foreach($echIds as $echId){
+                    //dd($echId);
+                    $table = $this->tableRepository->find($k);
+                    //dump($table);
+                    $tableName = $table->getName();
+                     $codAno = $this->getCategories->generateCode($alphabet,$tableName,$testano)['codAno'];
+                     $testano = $this->getCategories->generateCode($alphabet,$tableName,$testano)['testano'];
+                    // $codAno = 'OOO';
+                    $echantillon = $this->echantillonRepository->find($echId);
+                    
+                    $listechs[]=$echantillon;
+                    $listetab[$i]['table'] = $table->getId();
+                    $listetab[$i]['code'] = $codAno;
+                    $listetab[$i]['echantillon'] = $echantillon->getId();
+                    $i++;
+                }
+                // dd($listetab);
+            }
+            
+                // dump($testano);
+                //dd($listetab);
+                //dd($listechs);
+                $em = $this->getDoctrine()->getManager();
+            
+                foreach($listetab as $l){
+                    $echantillontab = $this->echantillonRepository->find($l['echantillon']);
+                    $echantillontab->setTableJury($this->tableRepository->find($l['table']));
+                    $echantillontab->setCode($l['code']);
+                    // dump($echantillontab);
+                    $em->flush();
+                    $em->clear();
+                }
+            }
+        
         }
-        return $this->redirectToRoute('table-index');
-
-
+        //dd('ici');
+        
+        // $em->flush();
+        // dump('flush');
+    }
+    }
+    
+    
+    //dd($tabEchs);
+    return $this->redirectToRoute('table-index');
     }
     
     /**
@@ -160,6 +231,7 @@ class TableController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+            //dd($table);
             $em = $this->getDoctrine()->getManager();
             $em->persist($table);
             $em->flush();
@@ -182,7 +254,7 @@ class TableController extends AbstractController
         //lister uniquement les catégories du concours
         $categories = $this->categorieRepository->findFromConcours($concours);
         
-        $form = $this->createForm(TableEditType::class,$table,['choice_categories' => $categories]);
+        $form = $this->createForm(TableType::class,$table,['choice_categories' => $categories]);
 
         $form->handleRequest($request);
 
@@ -218,8 +290,18 @@ class TableController extends AbstractController
      */
     public function delete($id): Response
     {
-        $table = $this->tableRepository->find($id);
         $em = $this->getDoctrine()->getManager();
+
+        $table = $this->tableRepository->find($id);
+        //suppression des échantillons de la table
+        $echs = $table->getEchantillons();
+        foreach($echs as $e){
+            //dd($e);
+            $e->setTableJury(null);
+            $em->persist($e);
+            $em->flush();
+        }
+       
         $em->remove($table);
         $em->flush();
         return $this->redirectToRoute('table-index');

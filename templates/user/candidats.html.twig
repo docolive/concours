@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+{{titre}}
+{% endblock %}
+
+{% block body %}
+
+
+<div class="row justify-content-center mt-4">
+<div class="col text-center">
+    <h2>{{titre}}</h2>
+    <br>
+    {{concours.name}}
+</div>
+</div>
+
+<div class="row mt-4 d-flex justify-content-center">
+
+<div class="col text-center">
+<a href="{{ path('user_add') }}"><button class="btn btn-success">Ajouter un candidat</button></a>
+</div>
+</div>
+
+<div class="row mt-2 d-flex justify-content-center">
+{{totalCandidats}} candidats pour {{totalEch}} échantillons.
+</div>
+
+<div class="row mt-4 d-flex justify-content-center">
+    <div class="col mb-5">
+    <table class="table table-striped table-bordered" style="font-size:0.9em;width:90%;margin:auto">
+        <thead>
+            <tr>
+                <th>Nom Prénom</th>
+                <th>Echantillons</th>
+                <th>Catégories</th>
+                <th>Juré</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for t in tab %}
+            <tr class="align-middle">
+                <td style="text-align:left">{{ t.nom }}</td>
+                <td>{{t.nbrech}}</td>
+                <td style="text-align:left">
+                {% if t.categories|length > 0 %}
+                <ul>
+                
+                    {% for c in t.categories %}
+                    <li>
+                        {{c}}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                </td>
+                <td>
+               {{t.jure}}
+                </td>
+                
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Aucune utilisateur pour l'instant</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+    
+{% endblock %}

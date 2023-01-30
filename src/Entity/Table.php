@@ -6,10 +6,13 @@ use App\Repository\TableRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator as MyAssert;
 
 /**
  * @ORM\Entity(repositoryClass=TableRepository::class)
  * @ORM\Table(name="`table`")
+ * @MyAssert\CheckProcede
  */
 class Table
 {
@@ -39,6 +42,13 @@ class Table
      * @ORM\OneToMany(targetEntity=Echantillon::class, mappedBy="tableJury")
      */
     private $echantillons;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Procede::class, inversedBy="tables")
+     * @ORM\JoinColumn(nullable=false)
+     * 
+     */
+    private $procede;
 
     public function __construct()
     {
@@ -112,6 +122,18 @@ class Table
                 $echantillon->setTableJury(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProcede(): ?Procede
+    {
+        return $this->procede;
+    }
+
+    public function setProcede(?Procede $procede): self
+    {
+        $this->procede = $procede;
 
         return $this;
     }

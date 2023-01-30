@@ -19,6 +19,19 @@ class CategorieRepository extends ServiceEntityRepository
         parent::__construct($registry, Categorie::class);
     }
 
+    public function findFromConcoursAndCategorie($concours,$categorieName){
+        //dd($concours);
+        return $this->createQueryBuilder('c')
+        ->Join('c.type','t')
+        ->where('t.concours = :concours')
+        ->andWhere('c.name =:categoriename')
+        ->setParameter('concours',$concours)
+        ->setParameter('categoriename',$categorieName)
+        ->getQuery()
+        ->getResult()
+        ;
+    
+    }
 
     public function findFromConcours($concours){
         return $this->createQueryBuilder('c')
@@ -31,6 +44,23 @@ class CategorieRepository extends ServiceEntityRepository
         ;
     
     }
+
+    
+
+    public function findFromConcoursForTables($concours){
+        return $this->createQueryBuilder('c')
+        ->Join('c.type','t')
+        ->where('t.concours = :concours')
+        ->andWhere('c.participe = true')
+        ->orderBy('c.name','ASC')
+        ->setParameter('concours',$concours)
+        ->getQuery()
+        ->getResult()
+        ;
+    
+    }
+
+    
 
     // /**
     //  * @return Categorie[] Returns an array of Categorie objects

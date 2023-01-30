@@ -24,10 +24,19 @@ class Medaille
      */
     private $nom;
 
+     /**
+     * @ORM\Column(type="integer")
+     */
+    private $ordre;
+
     /**
      * @ORM\OneToMany(targetEntity=Echantillon::class, mappedBy="medaille")
      */
     private $echantillons;
+
+    public function __toString(){
+        return $this->nom;
+    }
 
     public function __construct()
     {
@@ -47,6 +56,18 @@ class Medaille
     public function setNom(string $nom): self
     {
         $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getOrdre(): ?int
+    {
+        return $this->ordre;
+    }
+
+    public function setOrdre(string $ordre): self
+    {
+        $this->ordre = $ordre;
 
         return $this;
     }

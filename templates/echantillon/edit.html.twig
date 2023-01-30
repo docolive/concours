@@ -1,71 +1,20 @@
 {% extends "base.html.twig" %}
 {% block body %}
-<div class="text-center mt-5">
+<div class="row text-center mt-5">
 <h4>Concours {{concours.name}}</h4>
 </div>
-{% include "echantillon/_form.html.twig" %}
+<div class="row mt-5" style="border:1px grey solid;border-radius:5px;padding:5px;background-color:#eee;width:35%">
+{{echantillon.user.profil.raisonSociale|upper}}
+<br>
+{{echantillon.user.profil.nom|title}} {{echantillon.user.profil.prenom|title}} 
+<br>
+Catégorie : {{echantillon.categorie.name}}
+</div>
+<div class="row mt-2">
+{{form(form)}}
+</div>
+
 {% endblock %}
 
-{% block javascripts %}
-<script>
-OT = false;
-test = false;
-$(function() {
-    
-    $("#echantillon_variety").hide();
-   
-    var categorieId = $("#echantillon_categorie" ).val();
-    categorieTypeIsOT(categorieId);
 
-    $("#echantillon_categorie").change(function(){
-        var categorieId = $("#echantillon_categorie" ).val();
-        categorieTypeIsOT(categorieId);
-    });
-    
-    /**
-    * faire apparaître l'input variety lorsque le type est oliveOt
-    * et réciproquement
-    */
-    function categorieTypeIsOT(categorieId){
-        var path = "{{path('checkOT')}}";
-        $.post(path, { categorieId: categorieId },function(data){
-            if(data == 1){
-                $("#echantillon_variety").show();
-                 OT = true;
-            }else{
-                $("#echantillon_variety").val("");
-                $("#echantillon_variety").hide();
-                OT = false;
-            }
-        });
-    }
-    
-    var $categorie = $('#echantillon_categorie');
-    // When categorie gets selected ...
-    $categorie.change(function() {
-        // ... retrieve the corresponding form.
-        var $form = $(this).closest('form');
-        // Simulate form data, but only include the selected categorie value.
-        var data = {};
-        data[$categorie.attr('name')] = $categorie.val();
-        // Submit data via AJAX to the form's action path.
-        $.ajax({
-            url : $form.attr('action'),
-            type: $form.attr('method'),
-            data : data,
-            success: function(html) {
-            // Replace current procede field ...
-            $('#echantillon_procede').replaceWith(
-                // ... with the returned one from the AJAX response.
-                $(html).find('#echantillon_procede')
-            );
-            // Position field now displays the appropriate procedes.
-            }
-        });
-    });
-
-});
-       
-</script>
-{% endblock %}
 

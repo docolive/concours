@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Concours CTO - trouver échantillon{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/css/jquery-ui.css">
+    <link rel="stylesheet" href="/css/jquery-ui.theme.css">
+
+{% endblock %}
+
+{% block body %}
+
+{{form(form)}}
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $( "#form_search" ).autocomplete({
+            source: "{{path('echantillon_search')}}",
+            minLength: 2,
+            select: function( event, ui ) {
+                $('#form_search').val(ui.item.label);
+                $('#form_echantillonId').val(ui.item.name);
+                var echantillonId = ui.item.name
+
+                var url = "{{path('echantillon_edit')}}?echantillonId="+echantillonId;
+                // alert(url);
+                
+                $(location).prop('href', url);
+            }
+        });
+
+</script> 
+
+{% endblock %}
+
+

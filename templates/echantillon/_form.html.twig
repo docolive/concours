@@ -1,20 +1,31 @@
 <div class="row mt-4 d-flex justify-content-center">
 <div class="col-md-6">
 {{ form_start(form) }}
+{% if form.categorie is defined %}
      {{ form_row(form.categorie) }}
+{% endif %}
      {% if form.procede is defined %}
         {{ form_row(form.procede) }}
      {% endif %}
      {% if form.variety is defined %}
         {{ form_row(form.variety) }}
      {% endif %}
-    {{ form_row(form.lot) }}
-    {{ form_row(form.volume) }}
-    {{ form_row(form.description) }} 
+      {% if form.lot is defined %}
+         {{ form_row(form.lot) }}
+      {% endif %}
+      {% if form.volume is defined %}
+         {{ form_row(form.volume) }}
+      {% endif %}
+      {% if form.description is defined %}
+         {{ form_row(form.description) }} 
+      {% endif %}
 
     {% if admin == 1 %}
     {{ form_row(form.recu) }}
     {{ form_row(form.paye) }}
+    {{ form_row(form.public_ref) }}
+    {{ form_row(form.code) }}
+    {{ form_row(form.medaille) }}
     
     {% endif %}
     

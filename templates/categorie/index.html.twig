@@ -11,6 +11,8 @@
 <th>Sous-catégories</th>
 <th>Ordre</th>
 <th>Nom</th>
+<th>Participation</th>
+<th>Table</th>
 <th>Actions</th>
 </tr>
 {% for categorie in categories %}
@@ -25,6 +27,17 @@
     </td>
     <td>{{categorie.ordre}}</td>
     <td style="text-align:left">{{categorie.name}}</td>
+    {% set part = 'ouverte' %}
+    {% if categorie.participe == false %}
+    {% set part = 'fermée' %}
+    {% endif %}
+    <td style="text-align:center">{{part}}</td>
+    <td style="text-align:center">
+    {% for table in categorie.tables %}
+        {{table.name}}
+    {% endfor %}
+    </td>
+
     <td>
     <a href="{{ path('categorie_edit', {'id': categorie.id}) }}">
     <button class="btn btn-primary btn-sm py-0" style="font-size: 0.8em;"><i class="fas fa-edit"></i></button></a>

@@ -34,6 +34,7 @@ class CategorieController extends AbstractController
         if($concours == 'vide'){
             return $this->redirectToRoute('concours_choix');
         }
+
         return $this->render('categorie/index.html.twig', [
             'categories' => $categorieRepository->findFromConcours($concours)
         ]);

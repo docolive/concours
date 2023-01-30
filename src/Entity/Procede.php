@@ -34,9 +34,15 @@ class Procede
      */
     private $echantillons;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Table::class, mappedBy="procede")
+     */
+    private $tables;
+
     public function __construct()
     {
         $this->echantillons = new ArrayCollection();
+        $this->tables = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -97,4 +103,36 @@ class Procede
 
         return $this;
     }
+
+    /**
+     * @return Collection|Table[]
+     */
+    public function getTables(): Collection
+    {
+        return $this->tables;
+    }
+
+    public function addTable(Table $table): self
+    {
+        if (!$this->tables->contains($table)) {
+            $this->tables[] = $table;
+            $table->setProcede($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTable(Table $table): self
+    {
+        if ($this->tables->removeElement($table)) {
+            // set the owning side to null (unless already changed)
+            if ($table->getProcede() === $this) {
+                $table->setProcede(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

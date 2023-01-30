@@ -55,6 +55,11 @@ class Categorie
      */
     private $tables;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $participe = true;  
+
     // /**
     //  * @ORM\ManyToOne(targetEntity=Concours::class, inversedBy="categories")
     //  */
@@ -222,6 +227,18 @@ class Categorie
                 $table->setCategorie(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getParticipe(): ?bool
+    {
+        return $this->participe;
+    }
+
+    public function setParticipe(bool $participe): self
+    {
+        $this->participe = $participe;
 
         return $this;
     }

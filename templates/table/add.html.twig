@@ -1,4 +1,67 @@
 {% extends "base.html.twig" %}
 {% block body %}
-{{form(form)}}
+{% include "table/_add-form.html.twig" %}
+{% endblock %}
+
+{% block javascripts %}
+<script>
+OT = false;
+test = false;
+$(function() {
+    
+    $("#table_variety").hide();
+   
+    var categorieId = $("#table_categorie" ).val();
+    categorieTypeIsOT(categorieId);
+
+    $("#table_categorie").change(function(){
+        var categorieId = $("#table_categorie" ).val();
+        categorieTypeIsOT(categorieId);
+    });
+    
+    /**
+    * faire apparaître l'input variety lorsque le type est oliveOt
+    * et réciproquement
+    */
+    function categorieTypeIsOT(categorieId){
+        var path = "{{path('checkOT')}}";
+        $.post(path, { categorieId: categorieId },function(data){
+            if(data == 1){
+                $("#table_variety").show();
+                 OT = true;
+            }else{
+                $("#table_variety").val("");
+                $("#table_variety").hide();
+                OT = false;
+            }
+        });
+    }
+    
+    var $categorie = $('#table_categorie');
+    // When categorie gets selected ...
+    $categorie.change(function() {
+        // ... retrieve the corresponding form.
+        var $form = $(this).closest('form');
+        // Simulate form data, but only include the selected categorie value.
+        var data = {};
+        data[$categorie.attr('name')] = $categorie.val();
+        // Submit data via AJAX to the form's action path.
+        $.ajax({
+            url : $form.attr('action'),
+            type: $form.attr('method'),
+            data : data,
+            success: function(html) {
+            // Replace current procede field ...
+            $('#table_procede').replaceWith(
+                // ... with the returned one from the AJAX response.
+                $(html).find('#table_procede')
+            );
+            // Position field now displays the appropriate procedes.
+            }
+        });
+    });
+
+});
+       
+</script>
 {% endblock %}

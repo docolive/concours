@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{titre}}{% endblock %}
+{% block title %}
+{{titre}}
+{% endblock %}
 
 {% block body %}
 
@@ -8,6 +10,8 @@
 <div class="row justify-content-center mt-4">
 <div class="col text-center">
     <h2>{{titre}}</h2>
+    <br>
+    {{concours.name}}
 </div>
 </div>
 

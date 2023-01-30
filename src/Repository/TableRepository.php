@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Type;
 use App\Entity\Table;
 use App\Entity\Concours;
 use App\Entity\Categorie;
@@ -30,13 +31,21 @@ class TableRepository extends ServiceEntityRepository
             Join::WITH,        // Join type
             't.categorie = c.id' // Join columns
         )
-        ->where('c.concours = :concours')
+        ->innerJoin(
+            Type::class,    // Entity
+            'ty',               // Alias
+            Join::WITH,        // Join type
+            'c.type = ty.id' // Join columns
+        )
+        ->where('ty.concours = :concours')
+        ->andWhere('c.participe = true')
         ->setParameter('concours',$concours)
         ->orderBy('t.name','ASC')
         ->getQuery()
         ->getResult()
         ;
     }
+
 
     // /**
     //  * @return Table[] Returns an array of Table objects

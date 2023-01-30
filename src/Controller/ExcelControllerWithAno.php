@@ -13,14 +13,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * @Route("/excel")
  */
-class ExcelController extends AbstractController
+class ExcelControllerWithAno extends AbstractController
 {
     private $session;
     public function __construct(ConcoursSession $concoursSession){
         $this->session = $concoursSession;
     }
     /**
-     * @Route("/echantillons", name="echantillons-liste-excel")
+     * @Route("/echantillons/ano", name="echantillons-liste-excel-with-ano")
      */
     public function index(EchantillonRepository $echantillonRepository): Response
     {
@@ -82,7 +82,7 @@ class ExcelController extends AbstractController
             $sheet->setCellValue('O'.$l, $e->getLot());
             $sheet->setCellValue('P'.$l, $e->getVolume());
             $sheet->setCellValue('Q'.$l, $e->getPublicRef());
-            $sheet->setCellValue('R'.$l, '');
+            $sheet->setCellValue('R'.$l, $e->getCode());
             if(is_null($e->getPaiement())){
                 $paiement = '';
             }else{

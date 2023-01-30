@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Procede;
 use App\Entity\Categorie;
 use App\Entity\Echantillon;
+use App\Entity\Medaille;
 use App\Service\ConcoursSession;
 use Doctrine\DBAL\Types\BooleanType;
 use App\Repository\ProcedeRepository;
@@ -18,6 +19,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class EchantillonEditType extends AbstractType
 {
@@ -34,105 +36,56 @@ class EchantillonEditType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('categorie', EntityType::class, array(
-            'required' => true,
-            'placeholder' => '...',
-            'label_attr' => [
-                'class' => "mt-4",
-                //
-            ],
-            'attr' => [
-                //'style' => 'width:100px'
-            ],
-            'label' => 'Catégorie',
-            'class' => Categorie::class,
-            'query_builder' => function (CategorieRepository $repo) {
-                return $repo->createQueryBuilder('c')
-                    ->innerJoin('c.type','t','WITH','t.concours = :concoursId')
-                    ->where('t.concours = :concoursId')
-                    ->orderBy('c.type', 'ASC')
-                    ->setParameter('concoursId',$this->concoursId);
-            },
-            'choice_label' => 'name',
-
-        ))
         
-        ->add('lot')
-        ->add('volume')
-            ->add('description')
-            ->add('variety', TextType::class,[
-                'required' => false,
-                'attr' => [
-                    'placeholder' => 'Nom de la variété des olives de table',
-                ],
-                'label' => false
-            ])
             ->add('recu', CheckboxType::class,[
                 'required' => false,
                 'label' => 'Reçu'
             ])
             ->add('paye', CheckboxType::class,[
-                'attr'=>[
-                    'disabled' => true,   
-                ],
+                'required' => false,   
+                
                 'label' => 'Réglé'
+            ])
+            ->add('public_ref', TextType::class,[
+                'label' => 'code public',
+                'attr'=>[
+                    'readonly' => true,   
+                ]
+            ])
+            ->add('code', TextType::class,[
+                'label' => 'code anonyme',
+                'attr'=>[
+                    'readonly' => true,   
+                ]
+            ])
+            ->add('description', TextType::class,[
+                'label' => 'description',
+                'required' => false,
+                'attr'=>[
+                    //'readonly' => true,   
+                ]
+            ])
+            ->add('medaille',EntityType::class,[
+                'class'=>Medaille::class,
+                'placeholder' => "...",   
+                'required' => false,
+                'label' => 'Médaille',
+                
+            ])
+            
+            ->add('enregistrer',SubmitType::class,[
+                'label'=>'Enregistrer'
             ])
             
         ;
 
-        $formModifier = function (FormInterface $form, Categorie $categorie = null) {
-            if(null === $categorie) {
-                return;
-                }else{
-                    $this->categorie = $categorie;
-                    $pro = $this->er->findProcedes($categorie->getId());
-                    //dd($pro);
-                    if(!empty($pro)){
-
-                        $form->add('procede', EntityType::class, [
-                            'class' => Procede::class,
-                            'required' => false,
-                            'placeholder' => '...',
-                            'query_builder' => function (ProcedeRepository $prepo) {
-                                return $prepo->createQueryBuilder('p')
-                                ->where('p.categorie = :categorie')
-                                ->setParameter('categorie',$this->categorie);
-                            },
-                            'choice_label' => 'name',
-                            ]);
-                    }
-                }  
-        };
-
-        $builder->addEventListener(
-            FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) use ($formModifier) {
-                // this would be your entity, i.e. SportMeetup
-                $data = $event->getData();
-
-                $formModifier($event->getForm(), $data->getCategorie());
-            }
-        );
-
-        $builder->get('categorie')->addEventListener(
-            FormEvents::POST_SUBMIT,
-            function (FormEvent $event) use ($formModifier) {
-                // It's important here to fetch $event->getForm()->getData(), as
-                // $event->getData() will get you the client data (that is, the ID)
-                $categorie = $event->getForm()->getData();
-                //dd($categorie);
-                // since we've added the listener to the child, we'll have to pass on
-                // the parent to the callback functions!
-                $formModifier($event->getForm()->getParent(), $categorie);
-            }
-        );
+        
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Echantillon::class,
-            'validation_groups' => ['edit']
 
             
         ]);

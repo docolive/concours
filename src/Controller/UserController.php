@@ -33,7 +33,7 @@ class UserController extends AbstractController{
     /**
      * @Route("/admin/user/search", name="user-search-name")
      */
-    public function userserSearchName(Request $request): Response
+    public function userSearchName(Request $request): Response
     {
         $param = $request->query->get('term');
         $users = $this->userRepository->findSearch($param);
@@ -194,13 +194,39 @@ public function edit( Request $request, User $user): Response
             return $this->redirectToRoute('concours_choix');
         }
         $users = $userRepository->findCandidats($concours);
-        
-        return $this->render('user/index.html.twig', [
+        // dd($users);
+        //construction de la liste
+        $tab = array();
+        $i = 1;
+        $totech = 0;
+        $concoursId = $concours->getId();
+        foreach($users as $u){
+            $tab[$i]['nom'] = $u->getProfil()->getNom(). ' '.$u->getProfil()->getPrenom();
+            $nbrech = 0;
+            $tab[$i]['categories'] = array();
+            foreach($u->getEchantillons() as $e){
+                if($e->getCategorie()->getType()->getConcours()->getId() == $concoursId){
+                    if(!in_array($e->getCategorie()->getName(),$tab[$i]['categories'])){
+                        $tab[$i]['categories'][]=$e->getCategorie()->getName();   
+                    }
+                    $nbrech++;
+                }
+            }
+            $tab[$i]['nbrech'] = $nbrech;
+            $tab[$i]['jure'] = '';
+            if($u->getProfil()->getJure()){
+                $tab[$i]['jure'] = 'oui';
+            }
+            $totech += $nbrech;
+            $i++;
+        }
+        //dd($tab);
+        return $this->render('user/candidats.html.twig', [
+            'concours' => $concours,
             'titre' => "Liste des candidats",
-            'droits' => false,
-            'email' => false,
-            'utilisateur' => 'candidat',
-            'users' => $users
+            'tab'=>$tab,
+            'totalCandidats'=>$i - 1,
+            'totalEch' => $totech
         ]);
     }   
 
